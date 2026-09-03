@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Member Dashboard — Bin Eisa General Trading</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Hanken+Grotesk:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="../index.html" aria-label="Bin Eisa General Trading — home">
+      <span class="brand-mark">BE</span>
+      <span class="brand-name">
+        <b data-i18n="brand">BIN EISA</b>
+        <span data-i18n="brandSub">General Trading</span>
+      </span>
+    </a>
+    <div class="header-actions">
+      <button class="btn btn-ghost btn-small" id="signoutBtn" data-i18n="navSignout" type="button">Sign Out</button>
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" id="btn-en" aria-pressed="true" onclick="setLang('en')">EN</button>
+        <button type="button" id="btn-ar" aria-pressed="false" onclick="setLang('ar')">عربي</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="dash-main">
+  <div class="container">
+    <p class="loading-note" id="dashLoading" data-i18n="accLoading">Loading your dashboard…</p>
+
+    <div id="dashContent" class="hidden">
+      <div class="dash-head">
+        <h1><span data-i18n="accTitle">Member Dashboard</span><span class="gold-text" id="welcomeName" style="margin-inline-start:.4em"></span></h1>
+        <span class="chip" data-i18n="accBadge">Member · Content access only</span>
+      </div>
+      <p class="dash-sub" data-i18n="accSub">Your account gives you access to Bin Eisa insights, reports and updates. It is not an investment account and holds no funds.</p>
+
+      <div class="dash-grid">
+        <div class="stat-card"><b data-i18n="accName">Name</b><span id="accNameV">—</span></div>
+        <div class="stat-card"><b data-i18n="accEmail">Email</b><span id="accEmailV" style="direction:ltr;unicode-bidi:embed">—</span></div>
+        <div class="stat-card"><b data-i18n="accSince">Member since</b><span id="accSinceV">—</span></div>
+      </div>
+
+      <h2 style="font-size:1.35rem;margin-bottom:18px" data-i18n="accInsights">Latest insights &amp; reports</h2>
+      <div class="insight-list" id="insightList"></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-legal" style="border-top:0;padding-top:0">
+      <p data-i18n="footDisc">Bin Eisa General Trading is a commercial trading company. This website is for corporate information and general education only. It is not an offer to invest, a solicitation of funds, or financial advice, and no returns are promised or implied. No investment funds are accepted through this website.</p>
+      <p data-i18n="footCopy">© 2026 Bin Eisa General Trading. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/config.js"></script>
+<script src="../assets/i18n.js"></script>
+<script src="../assets/app.js"></script>
+<script src="../assets/account.js"></script>
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bin Eisa General Trading</title>
+<meta name="description" content="Bin Eisa General Trading — a UAE trading house operating across automotive import & trading, global product imports, phones & accessories, e-commerce, technology and digital business.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Hanken+Grotesk:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="#top" aria-label="Bin Eisa General Trading — home">
+      <span class="brand-mark">BE</span>
+      <span class="brand-name">
+        <b data-i18n="brand">BIN EISA</b>
+        <span data-i18n="brandSub">General Trading</span>
+      </span>
+    </a>
+    <nav class="main-nav" aria-label="Main">
+      <a href="#about" data-i18n="navAbout">About</a>
+      <a href="#sectors" data-i18n="navSectors">Our Sectors</a>
+      <a href="#how" data-i18n="navHow">How We Work</a>
+      <a href="#learn" data-i18n="navLearn">Learn</a>
+      <a href="#faq" data-i18n="navFaq">FAQ</a>
+      <a href="#contact" data-i18n="navContact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-gold btn-small" id="authLink" href="auth/login.html" data-account-href="account/index.html" data-i18n="navSignin">Sign In</a>
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" id="btn-en" aria-pressed="true" onclick="setLang('en')">EN</button>
+        <button type="button" id="btn-ar" aria-pressed="false" onclick="setLang('ar')">عربي</button>
+      </div>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile">
+    <a href="#about" data-i18n="navAbout">About</a>
+    <a href="#sectors" data-i18n="navSectors">Our Sectors</a>
+    <a href="#how" data-i18n="navHow">How We Work</a>
+    <a href="#learn" data-i18n="navLearn">Learn</a>
+    <a href="#faq" data-i18n="navFaq">FAQ</a>
+    <a href="#contact" data-i18n="navContact">Contact</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="hero-title">
+    <img class="hero-bg" src="https://images.unsplash.com/photo-1634007626524-f47fa37810a7?auto=format&amp;fit=crop&amp;w=1920&amp;q=80" alt="" aria-hidden="true" fetchpriority="high">
+    <div class="hero-veil" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <span class="kicker" data-i18n="heroKicker">United Arab Emirates · General Trading</span>
+      <h1 id="hero-title"><span data-i18n="heroTitle1">Real Trade.</span> <span class="gold-text" data-i18n="heroTitle2">Real Businesses.</span></h1>
+      <p class="hero-sub" data-i18n="heroSub">Bin Eisa General Trading is a UAE trading house operating across automotive import &amp; trading, global product sourcing, phones &amp; accessories, e-commerce and technology.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-gold" href="#sectors" data-i18n="ctaSectors">Explore Our Sectors</a>
+        <a class="btn btn-ghost" href="#contact" data-i18n="ctaContact">Contact Us</a>
+      </div>
+      <div class="trust-strip">
+        <div class="trust-item"><b data-i18n="trust1b">UAE Based</b><span data-i18n="trust1s">Operating from the Emirates</span></div>
+        <div class="trust-item"><b data-i18n="trust2b">7 Trading Sectors</b><span data-i18n="trust2s">Diversified commercial activity</span></div>
+        <div class="trust-item"><b data-i18n="trust3b">Global Sourcing</b><span data-i18n="trust3s">China &amp; international markets</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" aria-labelledby="about-title">
+    <div class="container about-grid">
+      <div class="about-copy reveal">
+        <h2 id="about-title" data-i18n="aboutTitle">A trading house built on real commercial activity</h2>
+        <p data-i18n="aboutP1">Bin Eisa General Trading is a UAE-based trading company. Our work is physical and commercial: we import and sell vehicles, source products from China and international markets, trade in smartphones and accessories, and operate e-commerce and technology ventures including the QaiTech ecosystem.</p>
+        <p data-i18n="aboutP2">This website presents who we are, what we trade, and how our business operates — together with plain-language educational content for anyone interested in understanding how commerce and investment work in the UAE.</p>
+      </div>
+      <figure class="about-visual reveal">
+        <img src="https://images.unsplash.com/photo-1678182451047-196f22a4143e?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Container terminal at a Gulf port — the physical side of global trade" loading="lazy">
+        <figcaption data-i18n="aboutCaption">Bin Eisa · General Trading · UAE</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- SECTORS -->
+  <section id="sectors" aria-labelledby="sectors-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 id="sectors-title" data-i18n="sectorsTitle">Seven sectors, one trading house</h2>
+        <p data-i18n="sectorsSub">Diversified commercial operations across physical trade, consumer goods and technology.</p>
+      </div>
+      <div class="sector-features">
+        <figure class="sector-tile reveal">
+          <img src="https://images.unsplash.com/photo-1601929862217-f1bf94503333?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Performance car under low studio light — the automotive trading division" loading="lazy">
+          <figcaption>
+            <h3 data-i18n="sec1t">Automotive Import &amp; Trading</h3>
+            <p data-i18n="sec1p">Importing and selling vehicles for the UAE and regional markets.</p>
+          </figcaption>
+        </figure>
+        <figure class="sector-tile reveal">
+          <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Stacked shipping containers — global product imports from China and beyond" loading="lazy">
+          <figcaption>
+            <h3 data-i18n="sec2t">Global Product Imports</h3>
+            <p data-i18n="sec2p">Sourcing and importing products from China and international markets.</p>
+          </figcaption>
+        </figure>
+      </div>
+      <ul class="sector-list reveal">
+        <li>
+          <span class="sector-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M10.5 19h3"/></svg></span>
+          <div><h3 data-i18n="sec3t">Phones &amp; Accessories</h3><p data-i18n="sec3p">Smartphones and accessories for wholesale and retail channels.</p></div>
+        </li>
+        <li>
+          <span class="sector-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2A2 2 0 009.4 17h7.9a2 2 0 001.9-1.5L21 8H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg></span>
+          <div><h3 data-i18n="sec4t">E-Commerce</h3><p data-i18n="sec4p">Online stores and digital retail operations.</p></div>
+        </li>
+        <li>
+          <span class="sector-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="2.5"/><path d="M9 2.5v2.5M15 2.5v2.5M9 19v2.5M15 19v2.5M2.5 9H5M2.5 15H5M19 9h2.5M19 15h2.5"/></svg></span>
+          <div><h3 data-i18n="sec5t">Technology &amp; Digital Business</h3><p data-i18n="sec5p">Technology projects, digital products and online ventures.</p></div>
+        </li>
+        <li>
+          <span class="sector-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l8 4.5v9l-8 4.5-8-4.5v-9l8-4.5z"/><path d="M12 11.5l8-4.5M12 11.5v9M12 11.5L4 7"/></svg></span>
+          <div><h3 data-i18n="sec6t">QaiTech Ecosystem</h3><p data-i18n="sec6p">Our technology arm — software, platforms and digital infrastructure.</p></div>
+        </li>
+        <li>
+          <span class="sector-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="8" width="19" height="8" rx="2"/><path d="M6.5 12h4M14 12h3.5"/></svg></span>
+          <div><h3 data-i18n="sec7t">UAE Number Plate Trading</h3><p data-i18n="sec7p">Selected UAE vehicle number plate opportunities, subject to applicable laws and regulations.</p></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- HOW WE WORK -->
+  <section id="how" aria-labelledby="how-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 id="how-title" data-i18n="howTitle">The trading cycle behind our business</h2>
+        <p data-i18n="howSub">How Bin Eisa's own commercial operations run — from sourcing to reinvestment.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <span class="step-num">1</span>
+          <h3 data-i18n="step1t">Source</h3>
+          <p data-i18n="step1p">We identify products and vehicles with real market demand, from trusted suppliers in China and worldwide.</p>
+        </div>
+        <div class="step reveal">
+          <span class="step-num">2</span>
+          <h3 data-i18n="step2t">Import</h3>
+          <p data-i18n="step2p">Goods are shipped, cleared and brought into the UAE under our trade licences.</p>
+        </div>
+        <div class="step reveal">
+          <span class="step-num">3</span>
+          <h3 data-i18n="step3t">Distribute &amp; Sell</h3>
+          <p data-i18n="step3p">We sell through showrooms, wholesale channels and our own e-commerce platforms.</p>
+        </div>
+        <div class="step reveal">
+          <span class="step-num">4</span>
+          <h3 data-i18n="step4t">Reinvest in Growth</h3>
+          <p data-i18n="step4p">Trading profits are reinvested into inventory, technology and new sectors.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEARN -->
+  <section id="learn" class="learn-section" aria-labelledby="learn-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 id="learn-title" data-i18n="learnTitle">Learn before you invest — anywhere</h2>
+        <p data-i18n="learnSub">Plain-language guidance for anyone considering any investment in the UAE. Education only — not advice, and not an offer.</p>
+      </div>
+      <ul class="learn-list">
+        <li class="reveal">
+          <span class="learn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l7.5 3v6c0 4.8-3.2 8.4-7.5 10-4.3-1.6-7.5-5.2-7.5-10v-6l7.5-3z"/><path d="M9 12l2 2 4-4.5"/></svg></span>
+          <div>
+            <h3 data-i18n="learn1t">Verify the licence first</h3>
+            <p data-i18n="learn1p">Any party offering investments to the public in the UAE must be licensed by the Securities &amp; Commodities Authority (SCA) or the Central Bank. Always verify a licence before committing any money — to anyone.</p>
+          </div>
+        </li>
+        <li class="reveal">
+          <span class="learn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 18.5l5-5.5 3.5 3 4.5-5.5 4 4"/><path d="M3.5 4v16.5H21"/></svg></span>
+          <div>
+            <h3 data-i18n="learn2t">Understand how returns really work</h3>
+            <p data-i18n="learn2p">Real business profits vary month to month — trade margins move with demand, shipping and prices. No genuine business earns a smooth fixed percentage every single month.</p>
+          </div>
+        </li>
+        <li class="reveal">
+          <span class="learn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5v4.5M12 16.5v.5"/><path d="M10.3 3.6L2.7 17a2 2 0 001.7 3h15.2a2 2 0 001.7-3L13.7 3.6a2 2 0 00-3.4 0z"/></svg></span>
+          <div>
+            <h3 data-i18n="learn3t">Question "guaranteed returns"</h3>
+            <p data-i18n="learn3p">Promises of fixed, high monthly returns are the most common sign of investment fraud worldwide. If it sounds too good to be true, treat it as a warning — not an opportunity.</p>
+          </div>
+        </li>
+        <li class="reveal">
+          <span class="learn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h7.5L19 8v12.5a1 1 0 01-1 1H7a1 1 0 01-1-1v-16a1 1 0 011-1z"/><path d="M14 3.5V8h4.5M9.5 13h5M9.5 16.5h5"/></svg></span>
+          <div>
+            <h3 data-i18n="learn4t">Read every agreement</h3>
+            <p data-i18n="learn4p">Understand the terms, the risks, and your exit rights before signing anything. If you cannot get clear written answers, walk away and seek independent professional advice.</p>
+          </div>
+        </li>
+      </ul>
+      <div class="disclaimer-box reveal" role="note">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg><span data-i18n="discTitle">Important Notice</span></h3>
+        <p data-i18n="discBody">Bin Eisa General Trading is a commercial trading company. This website presents corporate information and general educational content only. Nothing on this website is an offer to invest, a solicitation of funds, or financial advice, and no returns are promised or implied. Bin Eisa does not accept investment funds through this website. Anyone considering any investment should verify licensing with the UAE authorities and obtain independent professional advice.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section id="why" aria-labelledby="why-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 id="why-title" data-i18n="whyTitle">Built in the Emirates, trading with the world</h2>
+      </div>
+      <div class="why-strip reveal">
+        <div class="why-item">
+          <span class="learn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-4.5L19 8v13M9.5 21v-6h5v6"/></svg></span>
+          <h3 data-i18n="why1t">UAE roots</h3>
+          <p data-i18n="why1p">An Emirati trading house operating under UAE commercial licences.</p>
+        </div>
+        <div class="why-item">
+          <span class="learn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 7.5L12 12 3.5 7.5M12 12v9.5M3.5 7.5L12 3l8.5 4.5v9L12 21.5l-8.5-5v-9z"/></svg></span>
+          <h3 data-i18n="why2t">Real operations</h3>
+          <p data-i18n="why2p">Physical goods, real inventory and working sales channels — not paper promises.</p>
+        </div>
+        <div class="why-item">
+          <span class="learn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v4.5l3 2"/></svg></span>
+          <h3 data-i18n="why3t">Transparency</h3>
+          <p data-i18n="why3p">Clear communication about what we do — and equally clear about what we don't.</p>
+        </div>
+        <div class="why-item">
+          <span class="learn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 10.5h8M8 14h5M21 12a9 9 0 01-13.2 8L3 21l1.2-4.4A9 9 0 1121 12z"/></svg></span>
+          <h3 data-i18n="why4t">Bilingual support</h3>
+          <p data-i18n="why4p">Full Arabic and English communication for partners and clients.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" aria-labelledby="faq-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 id="faq-title" data-i18n="faqTitle">Frequently asked questions</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item reveal">
+          <summary data-i18n="faq1q">What does Bin Eisa General Trading do?</summary>
+          <div class="faq-body" data-i18n="faq1a">We are a UAE trading company. We import and sell vehicles, source products from China and international markets, trade smartphones and accessories, run e-commerce operations and build technology through the QaiTech ecosystem.</div>
+        </details>
+        <details class="faq-item reveal">
+          <summary data-i18n="faq2q">Can I invest through this website?</summary>
+          <div class="faq-body" data-i18n="faq2a">No. This website does not accept investment funds and does not make any investment offering. It presents our commercial activities and general educational content only. Any future investment structure would operate separately, under the required UAE licences and legal documentation.</div>
+        </details>
+        <details class="faq-item reveal">
+          <summary data-i18n="faq3q">How can I do business with Bin Eisa?</summary>
+          <div class="faq-body" data-i18n="faq3a">For trade, wholesale, supply or partnership enquiries, contact us through the channels below. Our team responds in Arabic and English.</div>
+        </details>
+        <details class="faq-item reveal">
+          <summary data-i18n="faq4q">What is QaiTech?</summary>
+          <div class="faq-body" data-i18n="faq4a">QaiTech is our technology arm — the ecosystem where we build software, digital platforms and online products that support and extend our trading operations.</div>
+        </details>
+        <details class="faq-item reveal">
+          <summary data-i18n="faq5q">Is the number plate activity regulated?</summary>
+          <div class="faq-body" data-i18n="faq5a">Vehicle number plate transactions in the UAE take place through official channels and are subject to applicable laws and regulations. We participate only in selected, compliant opportunities.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" aria-labelledby="contact-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 id="contact-title" data-i18n="contactTitle">Talk to our team</h2>
+        <p data-i18n="contactSub">Trade, wholesale and partnership enquiries — Arabic or English.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-channels">
+          <div class="channel reveal">
+            <span class="learn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6 8.5-6"/></svg></span>
+            <div><b data-i18n="chEmail">Email</b><span>info@bineisa.ae</span></div>
+          </div>
+          <div class="channel reveal">
+            <span class="learn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 3.5h3l1.5 4-2 1.5a12 12 0 006.5 6.5l1.5-2 4 1.5v3a2 2 0 01-2 2A16.5 16.5 0 013.5 5.5a2 2 0 012-2z"/></svg></span>
+            <div><b data-i18n="chPhone">Phone / WhatsApp</b><span>+971 XX XXX XXXX</span></div>
+          </div>
+          <div class="channel reveal">
+            <span class="learn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
+            <div><b data-i18n="chLoc">Location</b><span data-i18n="chLocV">United Arab Emirates</span></div>
+          </div>
+        </div>
+        <form class="contact-form reveal" id="contactForm" novalidate>
+          <div class="field">
+            <label for="f-name" data-i18n="fName">Full name</label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="f-email" data-i18n="fEmail">Email or phone</label>
+            <input id="f-email" name="contact" type="text" autocomplete="email" inputmode="email" required>
+          </div>
+          <div class="field">
+            <label for="f-topic" data-i18n="fTopic">Enquiry type</label>
+            <select id="f-topic" name="topic">
+              <option value="automotive" data-i18n="fT1">Automotive</option>
+              <option value="imports" data-i18n="fT2">Product imports</option>
+              <option value="phones" data-i18n="fT3">Phones &amp; accessories</option>
+              <option value="tech" data-i18n="fT4">Technology / QaiTech</option>
+              <option value="plates" data-i18n="fT5">Number plates</option>
+              <option value="other" data-i18n="fT6">Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-msg" data-i18n="fMsg">Message</label>
+            <textarea id="f-msg" name="message" required></textarea>
+          </div>
+          <button class="btn btn-gold" type="submit" data-i18n="fSend">Send Enquiry</button>
+          <p class="form-note" data-i18n="fNote">This form opens your email app with the message pre-filled. We reply within one business day.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="#top" aria-label="Bin Eisa General Trading — home">
+          <span class="brand-mark">BE</span>
+          <span class="brand-name">
+            <b data-i18n="brand">BIN EISA</b>
+            <span data-i18n="brandSub">General Trading</span>
+          </span>
+        </a>
+        <p data-i18n="footAbout">A UAE trading house working across automotive, global imports, consumer technology and digital business.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footNav">Explore</h4>
+        <ul>
+          <li><a href="#about" data-i18n="navAbout">About</a></li>
+          <li><a href="#sectors" data-i18n="navSectors">Our Sectors</a></li>
+          <li><a href="#learn" data-i18n="navLearn">Learn</a></li>
+          <li><a href="auth/register.html" data-i18n="linkRegister">Create an account</a></li>
+          <li><a href="#contact" data-i18n="navContact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footLegal">Legal</h4>
+        <ul>
+          <li><a href="#" data-i18n="legalPrivacy">Privacy Policy</a></li>
+          <li><a href="#" data-i18n="legalTerms">Terms of Use</a></li>
+          <li><a href="#" data-i18n="legalCookies">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <p data-i18n="footDisc">Bin Eisa General Trading is a commercial trading company. This website is for corporate information and general education only. It is not an offer to invest, a solicitation of funds, or financial advice, and no returns are promised or implied. No investment funds are accepted through this website.</p>
+      <p data-i18n="footCopy">© 2026 Bin Eisa General Trading. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/config.js"></script>
+<script src="assets/i18n.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
