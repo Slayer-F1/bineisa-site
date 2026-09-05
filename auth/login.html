@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com; connect-src 'self' https://rnbomgxmurdnwmvgklru.supabase.co wss://rnbomgxmurdnwmvgklru.supabase.co; frame-src https://challenges.cloudflare.com; base-uri 'self'; form-action 'self'; object-src 'none'">
 <title>Sign In — Bin Eisa General Trading</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,8 +25,8 @@
     <div class="header-actions">
       <a class="btn btn-ghost btn-small" href="../index.html" data-i18n="navBack">← Back to site</a>
       <div class="lang-toggle" role="group" aria-label="Language">
-        <button type="button" id="btn-en" aria-pressed="true" onclick="setLang('en')">EN</button>
-        <button type="button" id="btn-ar" aria-pressed="false" onclick="setLang('ar')">عربي</button>
+        <button type="button" id="btn-en" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" id="btn-ar" data-lang="ar" aria-pressed="false">عربي</button>
       </div>
     </div>
   </div>
@@ -41,36 +42,55 @@
   </div>
   <p class="auth-headline gold-text" data-i18n="authLoginHeadline">Welcome back</p>
 
-  <form class="auth-card" id="loginForm" novalidate>
-    <div class="auth-card-title">
-      <h1 data-i18n="authLoginTitle">Sign in to your account</h1>
-      <p data-i18n="authLoginSub">Access member insights and reports</p>
-    </div>
-
+  <div class="auth-card">
     <div class="msg" id="authMsg" role="alert" aria-live="polite"></div>
 
-    <div class="field">
-      <label for="f-email" data-i18n="fEmailOnly">Email address</label>
-      <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required>
-    </div>
-    <div class="field">
-      <label for="f-password" data-i18n="fPassword">Password</label>
-      <div class="pw-wrap">
-        <input id="f-password" name="password" type="password" autocomplete="current-password" required>
-        <button type="button" class="pw-toggle" data-for="f-password" aria-label="Show or hide password">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
-        </button>
+    <!-- Step 1: where to send the code -->
+    <form id="loginForm" class="auth-step" novalidate>
+      <div class="auth-card-title">
+        <h1 data-i18n="authLoginTitle">Sign in</h1>
+        <p data-i18n="authLoginSub">We'll send a one-time code to your email. No password needed.</p>
       </div>
-    </div>
+      <div class="field" id="emailField">
+        <label for="f-email" data-i18n="fEmailOnly">Email address</label>
+        <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="160">
+      </div>
+      <div class="field hidden" id="phoneField">
+        <label for="f-phone" data-i18n="fPhone">Mobile number</label>
+        <input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="24" placeholder="050 123 4567" dir="ltr">
+      </div>
+      <div class="honeypot" aria-hidden="true">
+        <label for="f-company">Company</label>
+        <input id="f-company" name="company" type="text" tabindex="-1" autocomplete="off">
+      </div>
+      <div id="captcha"></div>
+      <button class="btn btn-gold" type="submit" id="submitBtn" data-i18n="loginBtn">Send sign-in code</button>
+      <button class="btn-link hidden" type="button" id="channelSwap" data-i18n="usePhone">Use mobile number instead</button>
+      <p class="auth-alt">
+        <span data-i18n="noAcc">New to Bin Eisa?</span>
+        <a href="register.html" data-i18n="linkRegister">Create an account</a>
+      </p>
+      <p class="auth-note" data-i18n="authNote">A member account gives you access to our insights, reports and updates. It is not an investment account and holds no funds.</p>
+    </form>
 
-    <button class="btn btn-gold" type="submit" id="submitBtn" data-i18n="loginBtn">Sign In</button>
-
-    <p class="auth-alt">
-      <span data-i18n="noAcc">New to Bin Eisa?</span>
-      <a href="register.html" data-i18n="linkRegister">Create an account</a>
-    </p>
-    <p class="auth-note" data-i18n="authNote">A member account gives you access to our insights, reports and updates. It is not an investment account and holds no funds.</p>
-  </form>
+    <!-- Step 2: one-time code -->
+    <form id="codeForm" class="auth-step hidden" novalidate>
+      <div class="auth-card-title">
+        <h1 data-i18n="codeTitle">Enter your code</h1>
+        <p id="codeSub" data-i18n="codeSub">We sent a 6-digit code to your email. It expires in 10 minutes. If the email shows a sign-in link instead, you can click that too.</p>
+        <p class="code-dest" id="codeDest"></p>
+      </div>
+      <div class="field">
+        <label for="f-code" data-i18n="fCode">6-digit code</label>
+        <input id="f-code" class="otp-input" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" dir="ltr" required>
+      </div>
+      <button class="btn btn-gold" type="submit" id="verifyBtn" data-i18n="verifyBtn">Verify &amp; continue</button>
+      <div class="auth-actions">
+        <button class="btn-link" type="button" id="resendBtn" data-i18n="resendBtn">Resend code</button>
+        <button class="btn-link" type="button" id="changeBtn" data-i18n="changeEmail">Use a different email</button>
+      </div>
+    </form>
+  </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

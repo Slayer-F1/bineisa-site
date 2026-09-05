@@ -1,102 +1,256 @@
-/* Bin Eisa — auth page logic (register + login) */
+/* Bin Eisa — passwordless auth (email + mobile as account details, one-time codes) */
 (function(){
-  function show(el, key, kind){
-    if(!el) return;
-    el.textContent = window.t(key);
-    el.setAttribute('data-i18n', key);
-    el.classList.remove('msg-error','msg-success');
-    el.classList.add('show', kind === 'success' ? 'msg-success' : 'msg-error');
+  const CFG = window.BINEISA_CONFIG || {};
+  const sb = window.sbClient;
+  const loadedAt = Date.now();
+  const RESEND_SECONDS = 60;
+
+  const $ = id => document.getElementById(id);
+  const msg = $('authMsg');
+  const stepForm = $('stepForm');
+  const stepCode = $('stepCode');
+  const regForm = $('registerForm');
+  const loginForm = $('loginForm');
+  const codeForm = $('codeForm');
+
+  function show(key, kind){
+    if(!msg) return;
+    msg.textContent = window.t(key);
+    msg.setAttribute('data-i18n', key);
+    msg.className = 'msg show ' + (kind === 'success' ? 'msg-success' : kind === 'info' ? 'msg-info' : 'msg-error');
   }
-  function hide(el){ if(el) el.classList.remove('show'); }
+  function showRaw(text){
+    if(!msg) return;
+    msg.textContent = text;
+    msg.removeAttribute('data-i18n');
+    msg.className = 'msg show msg-error';
+  }
+  function hide(){ if(msg) msg.className = 'msg'; }
+  function fieldError(input, key){
+    if(input){ input.setAttribute('aria-invalid','true'); input.focus(); }
+    show(key,'error');
+  }
+  function mapError(error, phase){
+    if(!error) return null;
+    const code = String(error.code || '');
+    const m = (error.message || '').toLowerCase();
+    if(error.status === 429 || /rate_limit|rate limit|too many/.test(code + ' ' + m)) return 'errRate';
+    if(code === 'email_address_invalid' || /email address .* is invalid/.test(m)) return 'errEmail';
+    if(code === 'otp_disabled' || code === 'user_not_found' || /signups not allowed/.test(m)) return 'errNoAccount';
+    if(code === 'validation_failed' && /phone/.test(m)) return 'errPhone';
+    if(phase === 'verify' && (code === 'otp_expired' || /invalid|expired|token/.test(m))) return 'errCodeInvalid';
+    return null;
+  }
 
-  // Password visibility toggles
-  document.querySelectorAll('.pw-toggle').forEach(t=>{
-    t.addEventListener('click', ()=>{
-      const input = document.getElementById(t.getAttribute('data-for'));
-      if(!input) return;
-      input.type = input.type === 'password' ? 'text' : 'password';
-    });
-  });
+  // ── Phone normalisation to E.164 (UAE shortcuts + international) ──
+  window.normalizePhone = function(raw){
+    let s = String(raw || '').replace(/[\s()\-.]/g,'');
+    s = s.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x0660)); // Arabic-Indic digits
+    if(/^00/.test(s)) s = '+' + s.slice(2);
+    if(/^05\d{8}$/.test(s)) s = '+971' + s.slice(1);
+    if(/^5\d{8}$/.test(s)) s = '+971' + s;
+    if(/^9715\d{8}$/.test(s)) s = '+' + s;
+    return /^\+[1-9]\d{7,14}$/.test(s) ? s : null;
+  };
+  const validEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 
-  // ── Register ──
-  const regForm = document.getElementById('registerForm');
+  // ── Pending OTP state (survives a refresh of the code step) ──
+  const KEY = 'bineisa-otp';
+  function savePending(p){ try{ sessionStorage.setItem(KEY, JSON.stringify(Object.assign({ts:Date.now()}, p))); }catch(e){} }
+  function loadPending(){ try{ const p = JSON.parse(sessionStorage.getItem(KEY)||'null'); return p && Date.now()-p.ts < 10*60*1000 ? p : null; }catch(e){ return null; } }
+  function clearPending(){ try{ sessionStorage.removeItem(KEY); }catch(e){} }
+  let pending = null;
+
+  // ── Optional Turnstile captcha ──
+  let captchaToken = null;
+  function mountCaptcha(){
+    if(!CFG.captchaSiteKey) return;
+    const host = $('captcha');
+    if(!host) return;
+    const s = document.createElement('script');
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    s.async = true;
+    s.onload = ()=>{ try{ window.turnstile.render(host, { sitekey: CFG.captchaSiteKey, callback: t => { captchaToken = t; } }); }catch(e){} };
+    document.head.appendChild(s);
+  }
+  mountCaptcha();
+
+  // ── Step switching + resend cooldown ──
+  let cooldownTimer = null;
+  function startCooldown(){
+    const b = $('resendBtn');
+    if(!b) return;
+    let s = RESEND_SECONDS;
+    b.disabled = true;
+    b.textContent = window.t('resendIn',{s});
+    clearInterval(cooldownTimer);
+    cooldownTimer = setInterval(()=>{
+      s -= 1;
+      if(s <= 0){ clearInterval(cooldownTimer); b.disabled = false; b.textContent = window.t('resendBtn'); }
+      else b.textContent = window.t('resendIn',{s});
+    }, 1000);
+  }
+  function gotoCode(){
+    if(stepForm) stepForm.classList.add('hidden');
+    if(stepCode) stepCode.classList.remove('hidden');
+    const sub = $('codeSub');
+    if(sub){ sub.setAttribute('data-i18n', pending.channel === 'phone' ? 'codeSubPhone' : 'codeSub'); sub.textContent = window.t(sub.getAttribute('data-i18n')); }
+    const dest = $('codeDest');
+    if(dest) dest.textContent = pending.channel === 'phone' ? pending.phone : pending.email;
+    const input = $('f-code');
+    if(input){ input.value = ''; setTimeout(()=>input.focus(), 50); }
+    startCooldown();
+  }
+  function gotoForm(){
+    clearPending(); pending = null;
+    if(stepCode) stepCode.classList.add('hidden');
+    if(stepForm) stepForm.classList.remove('hidden');
+    hide();
+  }
+
+  // ── Send the one-time code ──
+  async function sendCode(p, isRegister){
+    const opts = { shouldCreateUser: !!isRegister };
+    if(captchaToken) opts.captchaToken = captchaToken;
+    if(p.channel === 'email'){
+      if(location.protocol.startsWith('http')){
+        opts.emailRedirectTo = location.origin + location.pathname.replace(/auth\/(register|login)(\.html)?$/, 'auth/login.html');
+      }
+      if(isRegister) opts.data = { full_name: p.name, phone: p.phone, preferred_lang: window.currentLang };
+      return sb.auth.signInWithOtp({ email: p.email, options: opts });
+    }
+    if(isRegister) opts.data = { full_name: p.name, preferred_lang: window.currentLang };
+    return sb.auth.signInWithOtp({ phone: p.phone, options: opts });
+  }
+
+  // ── Register: name + email + mobile + consent ──
   if(regForm){
-    regForm.addEventListener('submit', async function(ev){
+    const submit = $('submitBtn');
+    regForm.addEventListener('submit', window.guardClick(submit, async function(ev){
       ev.preventDefault();
-      const msg = document.getElementById('authMsg');
-      hide(msg);
-      if(!regForm.reportValidity()) return;
+      hide();
+      regForm.querySelectorAll('[aria-invalid]').forEach(i=>i.removeAttribute('aria-invalid'));
       const name = regForm.fullname.value.trim();
-      const email = regForm.email.value.trim();
-      const pw = regForm.password.value;
-      const pw2 = regForm.password2.value;
-      if(pw.length < 8){ show(msg,'errPwLen'); return; }
-      if(pw !== pw2){ show(msg,'errPwMatch'); return; }
-      if(!window.sbClient){ show(msg,'errGeneric'); return; }
-      const btn = document.getElementById('submitBtn');
-      btn.disabled = true;
+      const email = regForm.email.value.trim().toLowerCase();
+      const phone = window.normalizePhone(regForm.phone.value);
+      if(regForm.company && regForm.company.value){ show('otpSent','success'); return; } // honeypot
+      if(Date.now() - loadedAt < 2500){ show('errTooFast'); return; }
+      if(name.length < 2){ fieldError(regForm.fullname,'errName'); return; }
+      if(!validEmail(email)){ fieldError(regForm.email,'errEmail'); return; }
+      if(!phone){ fieldError(regForm.phone,'errPhone'); return; }
+      if(!regForm.consent.checked){ fieldError(regForm.consent,'errConsent'); return; }
+      if(!sb){ show('errGeneric'); return; }
+      pending = { channel:'email', email, phone, name };
       try{
-        const opts = { data: { full_name: name, preferred_lang: window.currentLang } };
-        if(location.protocol.startsWith('http')){
-          opts.emailRedirectTo = location.origin + location.pathname.replace(/auth\/register\.html$/,'auth/login.html');
-        }
-        const { data, error } = await window.sbClient.auth.signUp({ email: email, password: pw, options: opts });
-        if(error){
-          msg.textContent = error.message;
-          msg.removeAttribute('data-i18n');
-          msg.classList.remove('msg-success');
-          msg.classList.add('show','msg-error');
-        } else if(data && data.session){
-          // Email confirmation disabled server-side -> signed in immediately
-          window.location.href = '../account/index.html';
-        } else {
-          show(msg,'verifySent','success');
-          regForm.reset();
-        }
-      }catch(e){
-        show(msg,'errGeneric');
-      }finally{
-        btn.disabled = false;
-      }
-    });
+        const { error } = await sendCode(pending, true);
+        if(error){ const k = mapError(error,'send'); k ? show(k) : showRaw(error.message); return; }
+        savePending(pending);
+        show('otpSent','success');
+        gotoCode();
+      }catch(e){ show('errGeneric'); }
+    }));
   }
 
-  // ── Login ──
-  const loginForm = document.getElementById('loginForm');
+  // ── Login: email (or mobile when SMS is enabled) ──
   if(loginForm){
-    loginForm.addEventListener('submit', async function(ev){
+    const submit = $('submitBtn');
+    let channel = 'email';
+    const swap = $('channelSwap');
+    if(swap && CFG.phoneOtpEnabled){
+      swap.classList.remove('hidden');
+      swap.addEventListener('click', ()=>{
+        channel = channel === 'email' ? 'phone' : 'email';
+        $('emailField').classList.toggle('hidden', channel !== 'email');
+        $('phoneField').classList.toggle('hidden', channel !== 'phone');
+        swap.setAttribute('data-i18n', channel === 'email' ? 'usePhone' : 'useEmail');
+        swap.textContent = window.t(swap.getAttribute('data-i18n'));
+      });
+    }
+    loginForm.addEventListener('submit', window.guardClick(submit, async function(ev){
       ev.preventDefault();
-      const msg = document.getElementById('authMsg');
-      hide(msg);
-      if(!loginForm.reportValidity()) return;
-      if(!window.sbClient){ show(msg,'errGeneric'); return; }
-      const btn = document.getElementById('submitBtn');
-      btn.disabled = true;
-      try{
-        const { error } = await window.sbClient.auth.signInWithPassword({
-          email: loginForm.email.value.trim(),
-          password: loginForm.password.value
-        });
-        if(error){
-          msg.textContent = error.message;
-          msg.removeAttribute('data-i18n');
-          msg.classList.remove('msg-success');
-          msg.classList.add('show','msg-error');
-        } else {
-          window.location.href = '../account/index.html';
-        }
-      }catch(e){
-        show(msg,'errGeneric');
-      }finally{
-        btn.disabled = false;
+      hide();
+      loginForm.querySelectorAll('[aria-invalid]').forEach(i=>i.removeAttribute('aria-invalid'));
+      if(loginForm.company && loginForm.company.value){ show('otpSent','success'); return; }
+      if(Date.now() - loadedAt < 1500){ show('errTooFast'); return; }
+      if(!sb){ show('errGeneric'); return; }
+      if(channel === 'email'){
+        const email = loginForm.email.value.trim().toLowerCase();
+        if(!validEmail(email)){ fieldError(loginForm.email,'errEmail'); return; }
+        pending = { channel:'email', email };
+      } else {
+        const phone = window.normalizePhone(loginForm.phone.value);
+        if(!phone){ fieldError(loginForm.phone,'errPhone'); return; }
+        pending = { channel:'phone', phone };
       }
-    });
+      try{
+        const { error } = await sendCode(pending, false);
+        if(error){ const k = mapError(error,'send'); k ? show(k) : showRaw(error.message); return; }
+        savePending(pending);
+        show('otpSent','success');
+        gotoCode();
+      }catch(e){ show('errGeneric'); }
+    }));
   }
 
-  // If already signed in, go straight to the dashboard
-  if(window.sbClient && (regForm || loginForm)){
-    window.sbClient.auth.getSession().then(({data})=>{
-      if(data && data.session) window.location.href = '../account/index.html';
+  // ── Code step: verify / resend / change ──
+  if(codeForm){
+    const verifyBtn = $('verifyBtn');
+    const codeInput = $('f-code');
+    if(codeInput){
+      codeInput.addEventListener('input', ()=>{
+        codeInput.value = codeInput.value.replace(/[٠-٩]/g, d => String(d.charCodeAt(0)-0x0660)).replace(/\D/g,'').slice(0,6);
+      });
+    }
+    codeForm.addEventListener('submit', window.guardClick(verifyBtn, async function(ev){
+      ev.preventDefault();
+      hide();
+      const token = (codeInput.value || '').trim();
+      if(!/^\d{6}$/.test(token)){ fieldError(codeInput,'errCode'); return; }
+      if(!pending || !sb){ show('errGeneric'); return; }
+      try{
+        const params = pending.channel === 'phone'
+          ? { phone: pending.phone, token, type: 'sms' }
+          : { email: pending.email, token, type: 'email' };
+        const { data, error } = await sb.auth.verifyOtp(params);
+        if(error || !data || !data.session){ show(mapError(error,'verify') || 'errCodeInvalid'); codeInput.select(); return; }
+        clearPending();
+        window.location.href = '../account/';
+      }catch(e){ show('errGeneric'); }
+    }));
+    const resend = $('resendBtn');
+    if(resend){
+      resend.addEventListener('click', window.guardClick(resend, async function(){
+        if(!pending || !sb) return;
+        hide();
+        const { error } = await sendCode(pending, !!regForm);
+        if(error){ const k = mapError(error,'send'); k ? show(k) : showRaw(error.message); return; }
+        show('otpSent','success');
+        startCooldown();
+      }));
+    }
+    const change = $('changeBtn');
+    if(change) change.addEventListener('click', gotoForm);
+  }
+
+  // ── Magic-link / expired-link handling + already signed in ──
+  if(sb){
+    const hash = new URLSearchParams(location.hash.replace(/^#/,''));
+    const q = new URLSearchParams(location.search);
+    if(hash.get('error') || q.get('error')){ show('linkExpired'); history.replaceState(null,'',location.pathname); }
+    if(q.get('reason') === 'idle'){ show('idleSignedOut','info'); history.replaceState(null,'',location.pathname); }
+
+    sb.auth.onAuthStateChange((event, session)=>{
+      if(session && (event === 'SIGNED_IN' || event === 'INITIAL_SESSION')){
+        clearPending();
+        window.location.replace('../account/');
+      }
+    });
+    sb.auth.getSession().then(({data})=>{
+      if(data && data.session) window.location.replace('../account/');
     }).catch(()=>{});
   }
+
+  // Restore the code step after a refresh
+  pending = loadPending();
+  if(pending && stepCode){ gotoCode(); }
 })();
