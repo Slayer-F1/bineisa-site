@@ -49,13 +49,13 @@
     <form id="loginForm" class="auth-step" novalidate>
       <div class="auth-card-title">
         <h1 data-i18n="authLoginTitle">Sign in</h1>
-        <p data-i18n="authLoginSub">We'll send a one-time code to your email. No password needed.</p>
+        <p id="loginSub" data-i18n="authLoginSub">We'll send a one-time code to your email. No password needed.</p>
       </div>
-      <div class="field" id="emailField">
+      <div class="field hidden" id="emailField">
         <label for="f-email" data-i18n="fEmailOnly">Email address</label>
         <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="160">
       </div>
-      <div class="field hidden" id="phoneField">
+      <div class="field" id="phoneField">
         <label for="f-phone" data-i18n="fPhone">Mobile number</label>
         <input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="24" placeholder="050 123 4567" dir="ltr">
       </div>

@@ -3,13 +3,16 @@ window.BINEISA_CONFIG = {
   supabaseUrl: "https://rnbomgxmurdnwmvgklru.supabase.co",
   supabaseKey: "sb_publishable_5JjqQiUuj0uLfboeKoM9sg_JqleOLer",
 
-  /* Auth: passwordless. Email one-time code is always on.
-     Set phoneOtpEnabled to true after adding an SMS provider (Twilio etc.)
-     in Supabase → Authentication → Providers → Phone. */
-  phoneOtpEnabled: false,
+  /* Auth: passwordless one-time codes, no passwords.
+     authChannel "phone" = code by SMS (Twilio, configured in Supabase → Auth → Providers → Phone).
+     authChannel "email" = code by email (needs custom SMTP).
+     allowChannelSwap lets a member fall back to the other channel from the form. */
+  authChannel: "phone",
+  allowChannelSwap: true,
 
   /* Optional bot protection on auth forms: Cloudflare Turnstile site key.
-     Also enable Turnstile in Supabase → Authentication → Attack Protection. */
+     Also enable Turnstile in Supabase → Authentication → Attack Protection.
+     Strongly recommended with SMS — every unprotected request costs real money. */
   captchaSiteKey: "",
 
   /* Members are signed out after this many minutes without activity. */

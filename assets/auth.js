@@ -4,6 +4,7 @@
   const sb = window.sbClient;
   const loadedAt = Date.now();
   const RESEND_SECONDS = 60;
+  const PRIMARY = (CFG.authChannel === 'email') ? 'email' : 'phone';
 
   const $ = id => document.getElementById(id);
   const msg = $('authMsg');
@@ -37,6 +38,7 @@
     if(error.status === 429 || /rate_limit|rate limit|too many/.test(code + ' ' + m)) return 'errRate';
     if(code === 'email_address_invalid' || /email address .* is invalid/.test(m)) return 'errEmail';
     if(code === 'otp_disabled' || code === 'user_not_found' || /signups not allowed/.test(m)) return 'errNoAccount';
+    if(/phone provider|unsupported phone|sms provider|phone_provider_disabled/.test(code + ' ' + m)) return 'errSmsOff';
     if(code === 'validation_failed' && /phone/.test(m)) return 'errPhone';
     if(phase === 'verify' && (code === 'otp_expired' || /invalid|expired|token/.test(m))) return 'errCodeInvalid';
     return null;
@@ -97,6 +99,11 @@
     if(sub){ sub.setAttribute('data-i18n', pending.channel === 'phone' ? 'codeSubPhone' : 'codeSub'); sub.textContent = window.t(sub.getAttribute('data-i18n')); }
     const dest = $('codeDest');
     if(dest) dest.textContent = pending.channel === 'phone' ? pending.phone : pending.email;
+    const chg = $('changeBtn');
+    if(chg){
+      chg.setAttribute('data-i18n', pending.channel === 'phone' ? 'changeNumber' : 'changeEmail');
+      chg.textContent = window.t(chg.getAttribute('data-i18n'));
+    }
     const input = $('f-code');
     if(input){ input.value = ''; setTimeout(()=>input.focus(), 50); }
     startCooldown();
@@ -119,13 +126,18 @@
       if(isRegister) opts.data = { full_name: p.name, phone: p.phone, preferred_lang: window.currentLang };
       return sb.auth.signInWithOtp({ email: p.email, options: opts });
     }
-    if(isRegister) opts.data = { full_name: p.name, preferred_lang: window.currentLang };
+    if(isRegister) opts.data = { full_name: p.name, email: p.email, preferred_lang: window.currentLang };
     return sb.auth.signInWithOtp({ phone: p.phone, options: opts });
   }
 
-  // ── Register: name + email + mobile + consent ──
+  // ── Register: name + mobile + email + consent ──
   if(regForm){
     const submit = $('submitBtn');
+    const regSub = $('regSub');
+    if(regSub && PRIMARY === 'phone'){
+      regSub.setAttribute('data-i18n','authRegSubPhone');
+      regSub.textContent = window.t('authRegSubPhone');
+    }
     regForm.addEventListener('submit', window.guardClick(submit, async function(ev){
       ev.preventDefault();
       hide();
@@ -140,7 +152,7 @@
       if(!phone){ fieldError(regForm.phone,'errPhone'); return; }
       if(!regForm.consent.checked){ fieldError(regForm.consent,'errConsent'); return; }
       if(!sb){ show('errGeneric'); return; }
-      pending = { channel:'email', email, phone, name };
+      pending = { channel: PRIMARY, email, phone, name };
       try{
         const { error } = await sendCode(pending, true);
         if(error){ const k = mapError(error,'send'); k ? show(k) : showRaw(error.message); return; }
@@ -151,19 +163,25 @@
     }));
   }
 
-  // ── Login: email (or mobile when SMS is enabled) ──
+  // ── Login: mobile by default, email as the optional fallback ──
   if(loginForm){
     const submit = $('submitBtn');
-    let channel = 'email';
+    let channel = PRIMARY;
     const swap = $('channelSwap');
-    if(swap && CFG.phoneOtpEnabled){
+    const applyChannel = ()=>{
+      $('emailField').classList.toggle('hidden', channel !== 'email');
+      $('phoneField').classList.toggle('hidden', channel !== 'phone');
+      const sub = $('loginSub');
+      if(sub){ sub.setAttribute('data-i18n', channel === 'phone' ? 'authLoginSubPhone' : 'authLoginSub'); sub.textContent = window.t(sub.getAttribute('data-i18n')); }
+      if(swap){ swap.setAttribute('data-i18n', channel === 'phone' ? 'useEmail' : 'usePhone'); swap.textContent = window.t(swap.getAttribute('data-i18n')); }
+    };
+    applyChannel();
+    if(swap && CFG.allowChannelSwap !== false){
       swap.classList.remove('hidden');
       swap.addEventListener('click', ()=>{
         channel = channel === 'email' ? 'phone' : 'email';
-        $('emailField').classList.toggle('hidden', channel !== 'email');
-        $('phoneField').classList.toggle('hidden', channel !== 'phone');
-        swap.setAttribute('data-i18n', channel === 'email' ? 'usePhone' : 'useEmail');
-        swap.textContent = window.t(swap.getAttribute('data-i18n'));
+        applyChannel();
+        hide();
       });
     }
     loginForm.addEventListener('submit', window.guardClick(submit, async function(ev){

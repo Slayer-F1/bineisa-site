@@ -32,7 +32,7 @@
       const verified = !!(profileData && profileData.phone_verified) || !!userData.phone_confirmed_at;
       $('accNameV').textContent = fullName || '—';
       $('welcomeName').textContent = fullName ? fullName.split(' ')[0] : '';
-      $('accEmailV').textContent = userData.email || '—';
+      $('accEmailV').textContent = (profileData && profileData.email) || userData.email || '—';
       $('accSinceV').textContent = fmtDate(userData.created_at);
       $('accPhoneV').textContent = phone ? prettyPhone(phone) : window.t('accPhoneMissing');
       const chip = $('accPhoneChip');
@@ -84,7 +84,7 @@
       .order('created_at', { ascending:false });
 
     const [profileRes, insightsRes] = await Promise.all([
-      sb.from('profiles').select('full_name, preferred_lang, phone, phone_verified, created_at').eq('id', userData.id).maybeSingle(),
+      sb.from('profiles').select('full_name, preferred_lang, phone, phone_verified, email, created_at').eq('id', userData.id).maybeSingle(),
       insightsQuery()
     ]);
     profileData = profileRes.data || null;

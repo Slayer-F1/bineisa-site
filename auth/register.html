@@ -49,20 +49,20 @@
     <form id="registerForm" class="auth-step" novalidate>
       <div class="auth-card-title">
         <h1 data-i18n="authRegTitle">Create your account</h1>
-        <p data-i18n="authRegSub">Email and mobile number only — verified with a one-time code. No password.</p>
+        <p id="regSub" data-i18n="authRegSub">Email and mobile number only — verified with a one-time code. No password.</p>
       </div>
       <div class="field">
         <label for="f-fullname" data-i18n="fName">Full name</label>
         <input id="f-fullname" name="fullname" type="text" autocomplete="name" maxlength="120" required>
       </div>
       <div class="field">
-        <label for="f-email" data-i18n="fEmailOnly">Email address</label>
-        <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="160" required>
-      </div>
-      <div class="field">
         <label for="f-phone" data-i18n="fPhone">Mobile number</label>
         <input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="24" placeholder="050 123 4567" dir="ltr" required>
         <span class="field-hint" data-i18n="fPhoneHint">UAE format, e.g. 050 123 4567. International numbers are accepted with the country code.</span>
+      </div>
+      <div class="field">
+        <label for="f-email" data-i18n="fEmailOnly">Email address</label>
+        <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="160" required>
       </div>
       <div class="honeypot" aria-hidden="true">
         <label for="f-company">Company</label>
