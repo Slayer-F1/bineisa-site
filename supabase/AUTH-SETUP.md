@@ -2,13 +2,19 @@
 
 Project ref: `rnbomgxmurdnwmvgklru` · Dashboard: https://supabase.com/dashboard/project/rnbomgxmurdnwmvgklru
 
-The site is now **phone-first**: `assets/config.js` has `authChannel: "phone"`, so
-registration and sign-in send a 6-digit code by SMS. Email remains an account detail and
-a fallback channel members can pick from the form.
+> **Launch config: email.** `assets/config.js` has `authChannel: "email"` and
+> `allowChannelSwap: false`, because UAE SMS needs TDRA sender-ID registration before it
+> delivers anything (see below). Set up custom SMTP to go live —
+> [`email-templates/README.md`](email-templates/README.md).
+>
+> This document covers switching to SMS later. When Twilio is live, set
+> `authChannel: "phone"` and `allowChannelSwap: true`; no other code changes are needed.
+> Leave the swap off while a channel's provider is disabled, or the fallback link is a
+> click that always fails.
 
-Until the phone provider is switched on, Supabase answers `phone_provider_disabled` and
-the site shows *"SMS sign-in is not switched on yet. Use email instead, or contact us."*
-Nothing else needs changing in the code once Twilio is connected.
+With SMS selected, registration and sign-in send a 6-digit code by SMS and email stays an
+account detail. Until the phone provider is switched on, Supabase answers
+`phone_provider_disabled` and the site shows *"SMS sign-in is not switched on yet."*
 
 ---
 

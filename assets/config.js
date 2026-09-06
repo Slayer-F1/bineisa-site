@@ -6,9 +6,11 @@ window.BINEISA_CONFIG = {
   /* Auth: passwordless one-time codes, no passwords.
      authChannel "phone" = code by SMS (Twilio, configured in Supabase → Auth → Providers → Phone).
      authChannel "email" = code by email (needs custom SMTP).
-     allowChannelSwap lets a member fall back to the other channel from the form. */
-  authChannel: "phone",
-  allowChannelSwap: true,
+     allowChannelSwap offers the other channel from the form — keep it false while that
+     channel's provider is switched off, otherwise the link is a click that always fails.
+     Turn it back on once Twilio phone auth is live in Supabase. */
+  authChannel: "email",
+  allowChannelSwap: false,
 
   /* Optional bot protection on auth forms: Cloudflare Turnstile site key.
      Also enable Turnstile in Supabase → Authentication → Attack Protection.

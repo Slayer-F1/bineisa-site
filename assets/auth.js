@@ -138,6 +138,14 @@
       regSub.setAttribute('data-i18n','authRegSubPhone');
       regSub.textContent = window.t('authRegSubPhone');
     }
+    // The field the one-time code is sent to comes first, whichever channel is configured.
+    const emailField = $('f-email') && $('f-email').closest('.field');
+    const phoneField = $('f-phone') && $('f-phone').closest('.field');
+    if(emailField && phoneField){
+      const first  = PRIMARY === 'email' ? emailField : phoneField;
+      const second = PRIMARY === 'email' ? phoneField : emailField;
+      if(first.nextElementSibling !== second) second.parentNode.insertBefore(first, second);
+    }
     regForm.addEventListener('submit', window.guardClick(submit, async function(ev){
       ev.preventDefault();
       hide();
