@@ -67,13 +67,13 @@
 
   // ── Contact channels: real links from config, "Available soon" otherwise ──
   function prettyPhone(e164){
-    const m = /^\+971(\d)(\d{3})(\d{4})$/.exec(e164);
+    const m = /^\+971(\d{2})(\d{3})(\d{4})$/.exec(e164);
     return m ? `+971 ${m[1]}${m[2]} ${m[3]}` : e164;
   }
   function setChannel(id, href, text){
     const a = document.getElementById(id);
     if(!a) return;
-    if(href){ a.setAttribute('href', href); a.textContent = text; a.removeAttribute('aria-disabled'); }
+    if(href){ a.setAttribute('href', href); a.textContent = text; a.removeAttribute('aria-disabled'); a.removeAttribute('data-i18n'); }
     else { a.removeAttribute('href'); a.setAttribute('aria-disabled','true'); a.setAttribute('data-i18n','chSoon'); a.textContent = window.t('chSoon'); }
   }
   const c = CFG.contact || {};

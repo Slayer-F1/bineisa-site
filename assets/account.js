@@ -20,7 +20,7 @@
     }catch(e){ return iso ? iso.slice(0,10) : ''; }
   }
   function prettyPhone(e164){
-    const m = /^\+971(\d)(\d{3})(\d{4})$/.exec(e164 || '');
+    const m = /^\+971(\d{2})(\d{3})(\d{4})$/.exec(e164 || '');
     return m ? `+971 ${m[1]}${m[2]} ${m[3]}` : (e164 || '');
   }
 
@@ -134,5 +134,14 @@
     }));
   }
 
-  load().catch(()=>{ window.location.replace('../auth/login'); });
+  // A thrown load() is a data/network failure, not a missing session: stay put and
+  // offer a retry, otherwise the login page bounces the still-valid session back here.
+  load().catch(()=>{
+    const l = $('dashLoading');
+    if(l){
+      l.classList.remove('hidden');
+      l.setAttribute('data-i18n','accLoadFail');
+      l.textContent = window.t('accLoadFail');
+    }
+  });
 })();

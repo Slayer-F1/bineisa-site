@@ -7,11 +7,11 @@
 
   const $ = id => document.getElementById(id);
   const msg = $('authMsg');
-  const stepForm = $('stepForm');
-  const stepCode = $('stepCode');
   const regForm = $('registerForm');
   const loginForm = $('loginForm');
   const codeForm = $('codeForm');
+  const stepForm = regForm || loginForm;   // step 1: the details form on this page
+  const stepCode = codeForm;               // step 2: the one-time-code form
 
   function show(key, kind){
     if(!msg) return;

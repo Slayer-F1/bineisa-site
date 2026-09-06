@@ -123,6 +123,7 @@ window.I18N = {
     accInsights:"Latest insights & reports",
     accEmpty:"New insights are published regularly — check back soon.",
     accLoading:"Loading your dashboard…",
+    accLoadFail:"We couldn't load your dashboard just now. Check your connection and refresh the page.",
     catMarket:"Market", catEducation:"Education", catCompany:"Company", catInsight:"Insight",
     /* Legal */
     legalDraft:"Draft — subject to legal review before publication",
@@ -270,6 +271,7 @@ window.I18N = {
     accInsights:"أحدث الرؤى والتقارير",
     accEmpty:"تُنشر رؤى جديدة بانتظام — عد قريباً.",
     accLoading:"جارٍ تحميل لوحتك…",
+    accLoadFail:"تعذر تحميل لوحتك الآن. تحقق من اتصالك وأعد تحميل الصفحة.",
     catMarket:"السوق", catEducation:"تثقيف", catCompany:"الشركة", catInsight:"رؤية",
     /* Legal */
     legalDraft:"مسودة — تخضع للمراجعة القانونية قبل النشر",
