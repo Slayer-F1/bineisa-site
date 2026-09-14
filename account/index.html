@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com; connect-src 'self' https://rnbomgxmurdnwmvgklru.supabase.co wss://rnbomgxmurdnwmvgklru.supabase.co; frame-src https://challenges.cloudflare.com; base-uri 'self'; form-action 'self'; object-src 'none'">
-<title>Member Dashboard — Bin Eisa General Trading</title>
+<title>Member Dashboard — BIN EISA Stocks</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Hanken+Grotesk:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/stocks.css"><link rel="icon" href="/assets/favicon.svg">
 </head>
 <body>
 
@@ -22,7 +22,7 @@
         <span data-i18n="brandSub">General Trading</span>
       </span>
     </a>
-    <div class="header-actions">
+    <div class="header-actions"><a class="button gold compact" href="https://bineisa.com/">INVEST NOW ↗</a>
       <button class="btn btn-ghost btn-small" id="signoutBtn" data-i18n="navSignout" type="button">Sign Out</button>
       <div class="lang-toggle" role="group" aria-label="Language">
         <button type="button" id="btn-en" data-lang="en" aria-pressed="true">EN</button>
@@ -43,7 +43,7 @@
       </div>
       <p class="dash-sub" data-i18n="accSub">Your account gives you access to Bin Eisa insights, reports and updates. It is not an investment account and holds no funds.</p>
 
-      <div class="dash-grid dash-grid-4">
+      <div class="actions account-research-links"><a class="button gold" href="/watchlist">Watchlist / قائمة المراقبة →</a><a class="button" href="/private-watchlist">Private stocks / الأسهم الخاصة →</a><a class="button" href="/reports">Reports / التقارير →</a></div><div class="dash-grid dash-grid-4">
         <div class="stat-card"><b data-i18n="accName">Name</b><span id="accNameV">—</span></div>
         <div class="stat-card"><b data-i18n="accEmail">Email</b><span id="accEmailV" style="direction:ltr;unicode-bidi:embed">—</span></div>
         <div class="stat-card">
@@ -65,19 +65,12 @@
   </div>
 </main>
 
-<footer>
-  <div class="container">
-    <div class="footer-legal" style="border-top:0;padding-top:0">
-      <p data-i18n="footDisc">Bin Eisa General Trading is a commercial trading company. This website is for corporate information and general education only. It is not an offer to invest, a solicitation of funds, or financial advice, and no returns are promised or implied. No investment funds are accepted through this website.</p>
-      <p data-i18n="footCopy">© 2026 Bin Eisa General Trading. All rights reserved.</p>
-    </div>
-  </div>
-</footer>
+<footer id="ecosystem-footer" class="market-footer"></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../assets/config.js"></script>
 <script src="../assets/i18n.js"></script>
-<script src="../assets/app.js"></script>
+<script src="../assets/stock-account-copy.js"></script><script src="../assets/app.js"></script><script src="../assets/ecosystem.js"></script>
 <script src="../assets/account.js"></script>
 </body>
 </html>

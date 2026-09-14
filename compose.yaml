@@ -1,0 +1,32 @@
+services:
+  stocks:
+    build: .
+    ports:
+      - "127.0.0.1:3000:80"
+    environment:
+      EODHD_API_KEY: ${EODHD_API_KEY:-}
+      MARKET_EXCHANGES: ${MARKET_EXCHANGES:-US}
+      REDIS_URL: redis://cache:6379
+      # Host port is loopback-only; nginx.conf overwrites X-Forwarded-For.
+      TRUST_PROXY: "1"
+      PROVIDER_REQUESTS_PER_MINUTE: ${PROVIDER_REQUESTS_PER_MINUTE:-120}
+    depends_on:
+      cache:
+        condition: service_healthy
+    restart: unless-stopped
+  cache:
+    image: redis:7-alpine
+    command:
+      [
+        "redis-server",
+        "--maxmemory",
+        "128mb",
+        "--maxmemory-policy",
+        "noeviction",
+      ]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped

@@ -1,0 +1,16 @@
+{% comment %}
+  BIN EISA main Shopify site: render this snippet in the header and/or footer.
+  All styles are scoped. The link does not share accounts or credentials.
+  {% render 'bineisa-stocks-nav' %}
+{% endcomment %}
+<a class="bineisa-stocks-link" href="https://bineisastocks.com/" aria-label="BIN EISA Stocks — stock research and analysis">
+  <span>BIN EISA <strong>STOCKS</strong></span>
+  <span>{% if request.locale.iso_code == 'ar' %}أبحاث وتحليلات الأسهم{% else %}Stock research & analysis{% endif %} ↗</span>
+</a>
+<style>
+  .bineisa-stocks-link{display:flex;align-items:center;justify-content:space-between;gap:1.25rem;border:1px solid #c9a24b66;border-radius:4px;padding:12px 16px;background:#141510;color:#e4cf99;text-decoration:none;min-height:44px;font-family:inherit;font-size:12px}
+  .bineisa-stocks-link strong{letter-spacing:.12em;font-size:10px;margin-inline-start:7px;font-weight:500}
+  .bineisa-stocks-link:hover{background:#222219;border-color:#c9a24b}
+  .bineisa-stocks-link:focus-visible{outline:2px solid #e4cf99;outline-offset:4px}
+  @media(max-width:480px){.bineisa-stocks-link{flex-wrap:wrap;gap:6px}}
+</style>

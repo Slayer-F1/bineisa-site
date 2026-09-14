@@ -5,6 +5,9 @@
   const loadedAt = Date.now();
   const RESEND_SECONDS = 60;
   const PRIMARY = (CFG.authChannel === 'email') ? 'email' : 'phone';
+  const requestedNext = new URLSearchParams(location.search).get('next');
+  const next = /^\/(watchlist|private-watchlist|stocks(?:\/[A-Z0-9.-]+)?|reports(?:\/[A-Z0-9.-]+)?|account\/)$/i.test(requestedNext || '') ? requestedNext : '/account/';
+  document.querySelectorAll('a[href="register.html"],a[href="login.html"]').forEach(a=>{a.href += '?next='+encodeURIComponent(next);});
 
   const $ = id => document.getElementById(id);
   const msg = $('authMsg');
@@ -121,7 +124,7 @@
     if(captchaToken) opts.captchaToken = captchaToken;
     if(p.channel === 'email'){
       if(location.protocol.startsWith('http')){
-        opts.emailRedirectTo = location.origin + location.pathname.replace(/auth\/(register|login)(\.html)?$/, 'auth/login.html');
+        opts.emailRedirectTo = location.origin + '/auth/login.html?next=' + encodeURIComponent(next);
       }
       if(isRegister) opts.data = { full_name: p.name, phone: p.phone, preferred_lang: window.currentLang };
       return sb.auth.signInWithOtp({ email: p.email, options: opts });
@@ -240,7 +243,7 @@
         const { data, error } = await sb.auth.verifyOtp(params);
         if(error || !data || !data.session){ show(mapError(error,'verify') || 'errCodeInvalid'); codeInput.select(); return; }
         clearPending();
-        window.location.href = '../account/';
+        window.location.href = next;
       }catch(e){ show('errGeneric'); }
     }));
     const resend = $('resendBtn');
@@ -268,11 +271,11 @@
     sb.auth.onAuthStateChange((event, session)=>{
       if(session && (event === 'SIGNED_IN' || event === 'INITIAL_SESSION')){
         clearPending();
-        window.location.replace('../account/');
+        window.location.replace(next);
       }
     });
     sb.auth.getSession().then(({data})=>{
-      if(data && data.session) window.location.replace('../account/');
+      if(data && data.session) window.location.replace(next);
     }).catch(()=>{});
   }
 

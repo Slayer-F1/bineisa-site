@@ -2,3 +2,9 @@
 *.md
 .gitignore
 supabase
+node_modules
+.env
+.env.*
+test
+artifacts
+integrations
