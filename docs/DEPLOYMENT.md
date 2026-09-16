@@ -53,7 +53,17 @@ The supplied Compose setup publishes only `127.0.0.1:3000`, with Redis internal 
 
 Compose sets `TRUST_PROXY=1` because its host port is loopback-only and the supplied nginx config overwrites `X-Forwarded-For`. Never enable that setting on an application port directly reachable by untrusted clients. With a different ingress, restrict direct backend access and make the ingress replace the header with the verified client address.
 
-`/healthz` is liveness. `/readyz` requires configured provider credentials and a responsive cache; it does not perform billable provider requests. The Docker healthcheck uses readiness. A key being configured does not prove that every dataset is entitled—run the data acceptance checks below. Configure your host to alert/restart on unhealthy instances; Docker's `restart: unless-stopped` alone does not restart a running but unhealthy container.
+`/healthz` is liveness and is used by the Docker healthcheck. This keeps the website and account pages routable while data activation is pending. `/readyz` separately requires configured provider credentials and a readable/writable cache; it does not perform billable provider requests. Monitor this stricter endpoint for data availability. A key being configured does not prove that every dataset is entitled—run the data acceptance checks below. Configure your host to alert/restart on unhealthy instances; Docker's `restart: unless-stopped` alone does not restart a running but unhealthy container.
+
+### Existing Coolify GitHub application
+
+Use `Slayer-F1/bineisa-site`, branch `main`, the **Dockerfile** build pack, Dockerfile `/Dockerfile`, and internal port **80**. Preserve the existing domain and HTTPS configuration. Coolify uses the image's `HEALTHCHECK` for Dockerfile deployments, so changing only its dashboard healthcheck is insufficient to override an image healthcheck.
+
+Add `EODHD_API_KEY` as a runtime environment secret after the licensed subscription is available, with `MARKET_EXCHANGES=US` initially. Set `REDIS_URL` only when a reachable Redis service has been provisioned; leaving it unset uses the single-instance memory store. Do not use the public demo token in production. Leave `TRUST_PROXY` unset until the ingress client-IP handling has been verified. Multiple replicas require the shared Redis configuration described below.
+
+Enable Auto Deploy for push-triggered updates, or use Deploy manually after updating `main`. The repository update alone cannot verify that the Coolify webhook ran or that its build pack, branch and environment are correct. Confirm the deployed commit in Coolify and check `/healthz`, `/readyz` and a stock detail page after deployment. Missing market credentials intentionally leave data endpoints unavailable while the website remains accessible.
+
+Reference: [Coolify health checks](https://coolify.io/docs/applications/configuration/health-checks).
 
 ## 4. Scaling and limits
 
