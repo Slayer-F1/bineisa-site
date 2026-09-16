@@ -57,7 +57,7 @@ Compose sets `TRUST_PROXY=1` because its host port is loopback-only and the supp
 
 ### Existing Coolify GitHub application
 
-Use `Slayer-F1/bineisa-site`, branch `main`, the **Dockerfile** build pack, Dockerfile `/Dockerfile`, and internal port **80**. Preserve the existing domain and HTTPS configuration. Coolify uses the image's `HEALTHCHECK` for Dockerfile deployments, so changing only its dashboard healthcheck is insufficient to override an image healthcheck.
+Use `Slayer-F1/bineisa-site`, branch `main`, the **Dockerfile** build pack, Dockerfile `/Dockerfile`, and internal port **80**. Preserve the existing domain and HTTPS configuration. For a Coolify-managed healthcheck, use HTTP, host **127.0.0.1**, port **80**, path **/healthz**. Keep healthchecks enabled. The image also includes its own IPv4 healthcheck and installs `curl` for Coolify versions that generate a `localhost` probe. Alpine's bundled `wget` can select IPv6 localhost without falling back to the application's IPv4 listener.
 
 Add `EODHD_API_KEY` as a runtime environment secret after the licensed subscription is available, with `MARKET_EXCHANGES=US` initially. Set `REDIS_URL` only when a reachable Redis service has been provisioned; leaving it unset uses the single-instance memory store. Do not use the public demo token in production. Leave `TRUST_PROXY` unset until the ingress client-IP handling has been verified. Multiple replicas require the shared Redis configuration described below.
 

@@ -1,4 +1,7 @@
 FROM node:22-alpine
+# Coolify's generated localhost probe uses curl. Alpine wget may try only ::1
+# while the application listens on IPv4; curl can fall back to 127.0.0.1.
+RUN apk add --no-cache curl
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts
@@ -13,5 +16,5 @@ USER node
 EXPOSE 80
 # Keep research/account pages routable while market data is being configured.
 # Monitor /readyz separately for provider configuration and cache readiness.
-HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://127.0.0.1/healthz || exit 1
+HEALTHCHECK --interval=30s --timeout=3s CMD curl --fail --silent --show-error --max-time 2 http://127.0.0.1:80/healthz || exit 1
 CMD ["node", "server/index.js"]

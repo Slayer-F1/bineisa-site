@@ -36,8 +36,16 @@ The public home, stock directory, reports, news, stock overview and navigation w
 
 1. Configure the licensed BIN EISA EODHD key with confirmed public-display rights and endpoint entitlements; accept search, screening, pagination and all enabled-market datasets against that subscription.
 2. Apply the additive Supabase migration and run real-account, cross-device and two-user RLS isolation checks. Confirm branded OTP delivery and allowed redirect URLs.
-3. Build and run the production container with Redis on the target host. The local Docker daemon was unavailable; no container build, live Redis integration or production load test is claimed.
+3. Build and run the production container with Redis on the target host. The local Docker daemon was initially unavailable; the subsequent September 16 container checks below passed. Live Redis integration and production load testing remain outstanding.
 4. Test on physical iPhone/Safari and Android/Chrome. Responsive Chromium checks do not certify device-specific behavior or WebKit.
 5. Deploy to bineisastocks.com and install the supplied reverse-link snippet in the bineisa.com Shopify theme. Neither live site was changed during local verification.
 
 See [DEPLOYMENT.md](DEPLOYMENT.md) for the exact configuration and acceptance steps.
+
+## Coolify healthcheck regression — September 16
+
+The deployment log for commit `7b482ec` showed a generated `localhost:80/healthz` probe failing, despite Node listening on port 80. Rebuilt that image locally with Docker 29.5.3 and reproduced the failure: Alpine `wget` against `localhost` returned connection refused, while `127.0.0.1` returned HTTP 200 with `marketData: not-configured`.
+
+The corrected Dockerfile installs Alpine's `curl` package and uses an explicit IPv4 liveness probe. A new image built successfully, and a temporary container tested with the same curl-first localhost probe became **healthy**, with consecutive exit-code-zero healthchecks. Verbose curl confirmed that localhost resolved to `::1` and `127.0.0.1`; after the IPv6 connection was refused, it connected successfully to IPv4 and received HTTP 200. The image's own `127.0.0.1:80/healthz` probe also passed.
+
+This verifies the container correction without disabling healthchecks or requiring market-data credentials. Redeploy the new commit in Coolify so it builds the corrected image; a deployment pinned to the old commit may reuse the failing cached image.
