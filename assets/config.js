@@ -22,8 +22,8 @@ window.BINEISA_CONFIG = {
 
   /* Contact channels. Leave a value empty to show "Available soon" instead of a dead link. */
   contact: {
-    email: "info@bineisa.ae",
-    phoneE164: "",      // e.g. "+971501234567"
+    email: "info@bineisa.com",
+    phoneE164: "+971543366554",
     whatsappE164: ""    // e.g. "+971501234567"
   }
 };

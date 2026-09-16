@@ -1,6 +1,17 @@
-FROM nginx:1.27-alpine
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY . /usr/share/nginx/html
-RUN rm -f /usr/share/nginx/html/nginx.conf /usr/share/nginx/html/Dockerfile /usr/share/nginx/html/.dockerignore
+FROM node:22-alpine
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev --ignore-scripts
+COPY --chown=node:node server ./server
+COPY --chown=node:node assets ./assets
+COPY --chown=node:node auth ./auth
+COPY --chown=node:node account ./account
+COPY --chown=node:node legal ./legal
+COPY --chown=node:node index.html company.html 404.html ./
+ENV NODE_ENV=production HOST=0.0.0.0 PORT=80
+USER node
 EXPOSE 80
+# Keep research/account pages routable while market data is being configured.
+# Monitor /readyz separately for provider configuration and cache readiness.
 HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://127.0.0.1/healthz || exit 1
+CMD ["node", "server/index.js"]

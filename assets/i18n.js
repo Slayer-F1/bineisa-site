@@ -341,5 +341,5 @@ window.t = function(key, vars){
 window.initLang = function(){
   let lang = 'en';
   try{ lang = localStorage.getItem('bineisa-lang') || 'en'; }catch(e){}
-  if(lang !== 'en') window.setLang(lang);
+  window.setLang(lang === 'ar' ? 'ar' : 'en');
 };
