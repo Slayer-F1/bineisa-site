@@ -38,6 +38,7 @@
     if(!error) return null;
     const code = String(error.code || '');
     const m = (error.message || '').toLowerCase();
+    if(error.name === 'AuthRetryableFetchError' || /failed to fetch|fetch failed|network request failed|networkerror|load failed/.test(m)) return 'errAuthUnavailable';
     if(error.status === 429 || /rate_limit|rate limit|too many/.test(code + ' ' + m)) return 'errRate';
     if(code === 'email_address_invalid' || /email address .* is invalid/.test(m)) return 'errEmail';
     if(code === 'otp_disabled' || code === 'user_not_found' || /signups not allowed/.test(m)) return 'errNoAccount';
@@ -170,7 +171,7 @@
         savePending(pending);
         show('otpSent','success');
         gotoCode();
-      }catch(e){ show('errGeneric'); }
+      }catch(e){ show(mapError(e,'send') || 'errGeneric'); }
     }));
   }
 
@@ -217,7 +218,7 @@
         savePending(pending);
         show('otpSent','success');
         gotoCode();
-      }catch(e){ show('errGeneric'); }
+      }catch(e){ show(mapError(e,'send') || 'errGeneric'); }
     }));
   }
 
@@ -244,17 +245,19 @@
         if(error || !data || !data.session){ show(mapError(error,'verify') || 'errCodeInvalid'); codeInput.select(); return; }
         clearPending();
         window.location.href = next;
-      }catch(e){ show('errGeneric'); }
+      }catch(e){ show(mapError(e,'verify') || 'errGeneric'); }
     }));
     const resend = $('resendBtn');
     if(resend){
       resend.addEventListener('click', window.guardClick(resend, async function(){
         if(!pending || !sb) return;
         hide();
-        const { error } = await sendCode(pending, !!regForm);
-        if(error){ const k = mapError(error,'send'); k ? show(k) : showRaw(error.message); return; }
-        show('otpSent','success');
-        startCooldown();
+        try{
+          const { error } = await sendCode(pending, !!regForm);
+          if(error){ const k = mapError(error,'send'); k ? show(k) : showRaw(error.message); return; }
+          show('otpSent','success');
+          startCooldown();
+        }catch(e){ show(mapError(e,'send') || 'errGeneric'); }
       }));
     }
     const change = $('changeBtn');

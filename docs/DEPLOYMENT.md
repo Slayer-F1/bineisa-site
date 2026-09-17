@@ -41,6 +41,14 @@ Acceptance checks after applying the migration:
 3. Anonymous requests cannot read the table. Sign-out immediately clears private content from the screen.
 4. A failed database write leaves the interface showing failure rather than claiming a save.
 
+### Recovering a sign-in connection failure
+
+On September 17, the configured hostname `rnbomgxmurdnwmvgklru.supabase.co` returned DNS name-not-found both locally and through Cloudflare's public resolver. The live browser configuration and CSP matched this hostname; the authentication health endpoint could not be reached. This prevents registration, login and account-backed lists before any email-provider request can be completed.
+
+Sign in to the existing Supabase project dashboard and inspect its status. If it is paused, restore that same project and wait for its API hostname to resolve. If the project URL has changed, obtain the correct Project URL and publishable key from the owner; update `assets/config.js`, `server/index.js` and every HTML `connect-src` policy together. Do not substitute a service-role key. Changing Coolify environment variables alone does not override the current browser configuration.
+
+After connectivity returns, verify the authentication health endpoint, email-provider configuration, allowed redirect URLs and an owner-authorized signup. The user-facing network error now explains that the sign-in service cannot be reached; this message is not evidence that the service has been restored.
+
 ## 3. Application hosting
 
 This is now a Node service, not a static nginx-only image. The Docker image retains **port 80** and runs as the `node` user. Existing deployments must rebuild the Dockerfile; uploading only HTML and CSS will not provide `/api/*` routes.
