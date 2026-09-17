@@ -1,6 +1,6 @@
 <!-- Bin Eisa — Supabase "Confirm signup" template.
      Used when signInWithOtp({shouldCreateUser:true}) creates a NEW member.
-     {{ .Token }} is the 6-digit code the site asks for. Keep it. -->
+     {{ .Token }} is the verification code the site asks for. Keep it. -->
 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0B0B0D;margin:0;padding:32px 12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
   <tr>
     <td align="center">
@@ -31,10 +31,10 @@
           <td align="center" style="padding:26px 30px;">
             <table cellpadding="0" cellspacing="0" border="0" style="background:#1B1B21;border:1px solid rgba(201,162,75,0.28);border-radius:12px;">
               <tr>
-                <td align="center" style="padding:20px 34px;color:#E8CE8C;font-family:'Courier New',Courier,monospace;font-size:34px;font-weight:bold;letter-spacing:10px;">{{ .Token }}</td>
+                <td align="center" style="padding:20px 16px;color:#E8CE8C;font-family:'Courier New',Courier,monospace;font-size:28px;font-weight:bold;letter-spacing:4px;">{{ .Token }}</td>
               </tr>
             </table>
-            <div style="color:#B3AFA4;font-size:13px;padding-top:14px;">This code expires in 10 minutes and can be used once.</div>
+            <div style="color:#B3AFA4;font-size:13px;padding-top:14px;">This code can be used once. If it has expired, request a new code.</div>
           </td>
         </tr>
 
@@ -42,7 +42,7 @@
           <td align="center" style="padding:0 30px 8px 30px;">
             <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:22px;" dir="rtl">
               <div style="color:#F5F2EA;font-size:18px;font-weight:bold;line-height:1.5;">تأكيد حسابك</div>
-              <div style="color:#B3AFA4;font-size:14px;line-height:1.7;padding-top:8px;">أدخل هذا الرمز في موقع بن عيسى لإتمام إنشاء حساب العضوية. تنتهي صلاحية الرمز خلال 10 دقائق ويُستخدم مرة واحدة.</div>
+              <div style="color:#B3AFA4;font-size:14px;line-height:1.7;padding-top:8px;">أدخل هذا الرمز في موقع بن عيسى لإتمام إنشاء حساب العضوية. يُستخدم الرمز مرة واحدة. إذا انتهت صلاحيته، اطلب رمزاً جديداً.</div>
             </div>
           </td>
         </tr>

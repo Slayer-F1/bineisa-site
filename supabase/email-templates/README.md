@@ -1,89 +1,42 @@
-# Custom SMTP + email templates (Supabase project `bineisa`)
+# BIN EISA registration email setup
 
-Project ref: `rnbomgxmurdnwmvgklru` · Dashboard: https://supabase.com/dashboard/project/rnbomgxmurdnwmvgklru
+Project: `rnbomgxmurdnwmvgklru` ([dashboard](https://supabase.com/dashboard/project/rnbomgxmurdnwmvgklru)).
 
-Until custom SMTP is on, Supabase's built-in mailer is the only sender. It is meant for
-development only: it delivers reliably just to project team addresses and is capped at a
-couple of messages an hour, so public sign-ups fail or silently never arrive.
+## Verified on September 17, 2026
 
----
+- The project recovered to Healthy; public Auth health and settings endpoints returned HTTP 200 using the site's publishable key.
+- Email and new registrations are enabled; email confirmation remains required.
+- Custom SMTP is disabled. Supabase's default sender is restricted to project team addresses, so it cannot serve public registration. See [Supabase SMTP documentation](https://supabase.com/docs/guides/auth/auth-smtp).
+- Email OTP length is **8 digits**, expiry **3,600 seconds**. The frontend accepts complete 6–10 digit codes and lets Supabase validate the exact token, supporting email and SMS without truncation.
+- Site URL and allowed callbacks below were saved in the production dashboard.
 
-## 1. Get SMTP credentials (needs a provider account — do this part yourself)
+## Connect the existing email provider
 
-Any SMTP provider works. Recommended for the UAE + free tier:
+In **Authentication → Emails → SMTP Settings**, configure the SMTP host, port, username and password issued by the chosen email provider. Enter secrets directly in Supabase; never commit them or paste them into chat. Authenticate a sender on a domain BIN EISA owns and has verified with that provider, such as `no-reply@bineisa.com`. Use sender name **BIN EISA Stocks**.
 
-| Provider | Free tier | Host | Port |
-|---|---|---|---|
-| **Resend** (simplest) | 3,000/month | `smtp.resend.com` | `465` |
-| Brevo | 300/day | `smtp-relay.brevo.com` | `587` |
-| SendGrid | 100/day | `smtp.sendgrid.net` | `587` |
+Complete any sender/domain verification and SPF/DKIM records required by the provider. Choose the hourly email limit in Supabase to match the provider's allowance and expected traffic. Do not assume the business mailbox automatically supplies a production transactional-email service.
 
-Steps (Resend): create the account → **Domains → Add Domain** → add the DNS records it
-shows (SPF/DKIM at your domain registrar) → wait for "Verified" → **API Keys → Create**.
-For SMTP: username is `resend`, password is the API key.
+## Install both templates after SMTP is connected
 
-> Verify a real domain rather than sending from a free mailbox — unverified senders land
-> in spam, which for a one-time-code email means members simply cannot sign in.
+Under **Authentication → Emails → Templates**:
 
-## 2. Enter them in Supabase
-
-**Authentication → Emails → SMTP Settings → Enable custom SMTP**
-
-| Field | Value |
-|---|---|
-| Sender email | `no-reply@bineisa.ae` (must be on the verified domain) |
-| Sender name | `Bin Eisa General Trading` |
-| Host | provider host from the table |
-| Port | `465` (Resend) or `587` |
-| Username | provider username (`resend` for Resend) |
-| Password | the provider API key — paste it here, in the dashboard |
-
-Then **Authentication → Rate Limits** → raise "Emails per hour" from the default (`2`)
-to something usable, e.g. `100`.
-
-## 3. Paste the two templates
-
-**Authentication → Emails → Templates.** Both matter — Supabase picks a different one
-depending on whether the address is new:
-
-| Template | When the site triggers it | File |
+| Supabase template | File | Suggested subject |
 |---|---|---|
-| **Confirm signup** | a new member registers (`shouldCreateUser: true`) | `confirm-signup.html` |
-| **Magic Link** | an existing member signs in | `magic-link.html` |
+| Confirm sign up | `confirm-signup.html` | Your BIN EISA confirmation code |
+| Magic link or OTP | `magic-link.html` | Your BIN EISA sign-in code |
 
-Editing only one leaves half the members without a visible code. Each template must keep
-`{{ .Token }}` — that is the 6-digit code the site's second step asks for.
+Keep `{{ .Token }}` in both templates. New members and existing members use different templates. These files are prepared in the repository but have **not** been installed in production. Copy does not promise an expiry that could disagree with the provider configuration.
 
-Subject lines:
-- Confirm signup: `Your Bin Eisa confirmation code` — `رمز تأكيد حسابك في بن عيسى`
-- Magic Link: `Your Bin Eisa sign-in code` — `رمز الدخول إلى بن عيسى`
+## Production destinations
 
-## 4. Point auth at the live site
+- Site URL: `https://bineisastocks.com`
+- Redirect: `https://bineisastocks.com/auth/login.html`
+- Redirect with the app's return path: `https://bineisastocks.com/auth/login.html?next=**`
 
-**Authentication → URL Configuration**
+The query wildcard supports returning to a watchlist or stock after sign-in. The application separately restricts allowed return paths. The main business website remains `https://bineisa.com`; it is not the stock platform's authentication callback.
 
-- Site URL: `https://bineisa.ae` (or the current `http://bineisa.116.203.231.112.sslip.io`)
-- Redirect URLs: add `https://bineisa.ae/auth/login.html` and
-  `http://bineisa.116.203.231.112.sslip.io/auth/login.html`
+## Acceptance still required
 
-Without this, the fallback sign-in link in the email points at the wrong host.
+Using an owner-authorized email address outside the Supabase team, register, receive the code, verify it, check account/profile creation, sign out, and sign in again. Check both new-member and existing-member emails and Arabic/mobile code entry. Do not claim registration is ready based on the health endpoint alone.
 
-## 5. Verify
-
-Register at `/auth/register` with an address that is **not** a Supabase team member.
-The code email should arrive within seconds; entering it should land on `/account/`.
-
-```sql
--- confirm the account and profile were created
-select u.email, u.email_confirmed_at is not null as confirmed, p.full_name, p.phone
-from auth.users u left join public.profiles p on p.id = u.id
-order by u.created_at desc limit 5;
-```
-
----
-
-## SMS (optional, later)
-
-Phone one-time codes are built but switched off. To enable: **Authentication → Providers
-→ Phone**, connect Twilio/MessageBird, then set `phoneOtpEnabled: true` in
-`assets/config.js`. UAE SMS sender IDs need TDRA registration through the provider.
+SMS is disabled. For a future SMS rollout, follow [AUTH-SETUP.md](../AUTH-SETUP.md) and configure `authChannel` / `allowChannelSwap` in `assets/config.js` after the SMS provider is working.

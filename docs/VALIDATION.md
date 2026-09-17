@@ -49,3 +49,9 @@ The deployment log for commit `7b482ec` showed a generated `localhost:80/healthz
 The corrected Dockerfile installs Alpine's `curl` package and uses an explicit IPv4 liveness probe. A new image built successfully, and a temporary container tested with the same curl-first localhost probe became **healthy**, with consecutive exit-code-zero healthchecks. Verbose curl confirmed that localhost resolved to `::1` and `127.0.0.1`; after the IPv6 connection was refused, it connected successfully to IPv4 and received HTTP 200. The image's own `127.0.0.1:80/healthz` probe also passed.
 
 This verifies the container correction without disabling healthchecks or requiring market-data credentials. Redeploy the new commit in Coolify so it builds the corrected image; a deployment pinned to the old commit may reuse the failing cached image.
+
+## Authentication recovery — September 17
+
+Supabase returned Healthy after recovery. Public Auth health/settings checks returned HTTP 200. The production Site URL and sign-in callbacks were saved and verified in the dashboard. Custom SMTP is disabled; no public signup email or OTP verification has been completed.
+
+The dashboard is configured for 8-digit email OTPs. Four focused regression tests pass: preserve and submit all eight digits (including Arabic numeral entry), retain six-digit SMS support, reject incomplete input and provider-rejected tokens, and allow eight digits through both HTML forms. The full suite passes 33 tests (30 top-level and three readiness cases); syntax checks pass for 19 modules. These controlled tests do not substitute for live email delivery.

@@ -28,8 +28,8 @@ Private rows have `user_id = auth.uid()` policies for select, insert, update and
 Keep the existing email OTP provider and branded email templates. Verify custom SMTP delivery using a real authorized test account. Permit these exact production redirect paths in Supabase auth settings, including their `next` query values:
 
 ```text
-https://bineisastocks.com/auth/login.html**
-https://bineisastocks.com/auth/login**
+https://bineisastocks.com/auth/login.html
+https://bineisastocks.com/auth/login.html?next=**
 ```
 
 Use equivalent localhost redirects only in development. Do not enable cross-domain single sign-on: Shopify and stock-research accounts remain separate.
@@ -48,6 +48,12 @@ On September 17, the configured hostname `rnbomgxmurdnwmvgklru.supabase.co` retu
 Sign in to the existing Supabase project dashboard and inspect its status. If it is paused, restore that same project and wait for its API hostname to resolve. If the project URL has changed, obtain the correct Project URL and publishable key from the owner; update `assets/config.js`, `server/index.js` and every HTML `connect-src` policy together. Do not substitute a service-role key. Changing Coolify environment variables alone does not override the current browser configuration.
 
 After connectivity returns, verify the authentication health endpoint, email-provider configuration, allowed redirect URLs and an owner-authorized signup. The user-facing network error now explains that the sign-in service cannot be reached; this message is not evidence that the service has been restored.
+
+### Recovery verified on September 17
+
+The existing project subsequently recovered to Healthy, and both `/auth/v1/health` and `/auth/v1/settings` returned HTTP 200 with the browser publishable key. The Site URL was corrected from localhost to `https://bineisastocks.com`, and the two production callbacks above were saved. Email signups are enabled and email confirmation remains required.
+
+Custom SMTP is still disabled, so public registration email delivery remains blocked. The dashboard uses 8-digit email OTPs with a 3,600-second expiry; the frontend now preserves the full code instead of truncating it to six digits. Follow [email setup](../supabase/email-templates/README.md), then test real delivery and verification before declaring registration ready.
 
 ## 3. Application hosting
 

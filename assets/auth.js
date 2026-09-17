@@ -228,14 +228,16 @@
     const codeInput = $('f-code');
     if(codeInput){
       codeInput.addEventListener('input', ()=>{
-        codeInput.value = codeInput.value.replace(/[٠-٩]/g, d => String(d.charCodeAt(0)-0x0660)).replace(/\D/g,'').slice(0,6);
+        codeInput.value = codeInput.value.replace(/[٠-٩]/g, d => String(d.charCodeAt(0)-0x0660)).replace(/\D/g,'').slice(0,10);
       });
     }
     codeForm.addEventListener('submit', window.guardClick(verifyBtn, async function(ev){
       ev.preventDefault();
       hide();
       const token = (codeInput.value || '').trim();
-      if(!/^\d{6}$/.test(token)){ fieldError(codeInput,'errCode'); return; }
+      // Supabase email codes have a configurable length; the service validates
+      // the exact code. Preserve 8-digit email codes and 6-digit SMS codes.
+      if(!/^\d{6,10}$/.test(token)){ fieldError(codeInput,'errCode'); return; }
       if(!pending || !sb){ show('errGeneric'); return; }
       try{
         const params = pending.channel === 'phone'
