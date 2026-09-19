@@ -6,6 +6,8 @@ The existing vanilla HTML/CSS/JavaScript stack and Supabase passwordless account
 
 ## Run locally
 
+For the owner's **Marketstack free local preview**, use `npm run preview:marketstack` and open `http://127.0.0.1:3005`. See [preview setup and coverage](docs/MARKETSTACK-PREVIEW.md). This mode matches the seven visible reference stocks, with actual end-of-day prices and one year of history. It is not enabled on the public website.
+
 Requires Node.js 22 or later.
 
 ```powershell

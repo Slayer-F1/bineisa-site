@@ -62,6 +62,8 @@ export function errorState(error) {
       "This dataset is not available under the current data subscription.",
       "هذه البيانات غير متوفرة ضمن الاشتراك الحالي.",
     ),
+    MONTHLY_QUOTA: L("The monthly data allowance has been reached. Cached company data remains available.", "تم بلوغ حصة البيانات الشهرية. تبقى بيانات الشركات المخزنة متاحة."),
+    SYMBOL_NOT_COVERED: L("This symbol is outside the current seven-stock collection.", "هذا الرمز خارج مجموعة الأسهم السبعة الحالية."),
     RATE_LIMITED: L(
       "Too many requests. Please retry in a minute.",
       "طلبات كثيرة. يرجى المحاولة بعد دقيقة.",
@@ -123,7 +125,7 @@ export function source(meta) {
         : meta?.freshness === "company-reporting"
           ? L("Company reporting data", "بيانات تقارير الشركات")
           : L("Publisher timestamps", "توقيت الناشر");
-  return `<div class="data-note"><span>EODHD · ${kind}${meta?.mode === "provider-demo" ? ` · ${L("PROVIDER DEMO", "عرض تجريبي للمزود")}` : ""}</span><a href="/data-sources">${L("Data & methodology ↗", "البيانات والمنهجية ↗")}</a></div>`;
+  return `<div class="data-note"><span>${escape(meta?.provider || "EODHD")} · ${kind}${meta?.refreshHours ? ` · ${L("Weekly snapshot", "لقطة أسبوعية")} · ${L("Fetched", "تم الجلب")} ${escape(date(meta.retrievedAt))}` : ""}${meta?.mode === "provider-demo" ? ` · ${L("PROVIDER DEMO", "عرض تجريبي للمزود")}` : ""}</span><a href="/data-sources">${L("Data & methodology ↗", "البيانات والمنهجية ↗")}</a></div>`;
 }
 export function searchForm(value = "") {
   return `<form class="search-form" role="search" action="/search">${icon("search")}<input type="search" name="q" value="${escape(value)}" aria-label="${L("Search by company or ticker", "ابحث باسم الشركة أو الرمز")}" placeholder="${L("Search a company or symbol…", "ابحث باسم الشركة أو الرمز…")}" maxlength="80" required autocomplete="off"><button type="submit" aria-label="${L("Search", "بحث")}">→</button></form>`;

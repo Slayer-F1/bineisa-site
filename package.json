@@ -9,7 +9,8 @@
   "scripts": {
     "start": "node --env-file-if-exists=.env server/index.js",
     "test": "node --test",
-    "check": "node scripts/check.mjs"
+    "check": "node scripts/check.mjs",
+    "preview:marketstack": "node --env-file=.env.marketstack.local server/index.js"
   },
   "dependencies": {
     "redis": "6.2.1"

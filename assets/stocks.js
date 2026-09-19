@@ -20,6 +20,7 @@ import {
   toast,
   isNumber,
 } from "./market-ui.js";
+import { coverageNote, priceTable, priceFilters, priceCards, priceMetrics, priceReport, priceAnalysis, priceMethodology } from "./price-research.js";
 import { Watchlists } from "./watchlists.js";
 
 const main = document.getElementById("main");
@@ -41,6 +42,8 @@ const state = {
   version: 0,
 };
 const lists = new Watchlists(window.sbClient);
+const priceOnly = () => state.status?.provider === "Marketstack";
+const quoteLabel = () => priceOnly() ? L("End-of-day · refreshed weekly", "نهاية اليوم · تحديث أسبوعي") : L("Quotes delayed 15–20 min", "الأسعار متأخرة 15–20 دقيقة");
 const COPY = {
   researchPlatform: ["Stock research & analysis", "أبحاث وتحليلات الأسهم"],
   mainWebsite: [
@@ -64,6 +67,7 @@ const symbol = route.split("/")[2];
 let activeRefresh = null;
 const requestVersions = new Map();
 function translateShell() {
+  if (priceOnly()) document.querySelectorAll('#ecosystem-footer a[href="/reports"]').forEach(a => a.textContent = L("Price reports", "تقارير الأسعار"));
   document.querySelectorAll("[data-copy]").forEach((el) => {
     const value = COPY[el.dataset.copy];
     if (value) el.textContent = L(...value);
@@ -120,6 +124,7 @@ function syncSaveButtons() {
   });
 }
 function table(rows, meta) {
+  if (priceOnly()) return priceTable(rows, meta, star);
   if (!rows.length)
     return empty(
       L("No matching stocks", "لا توجد أسهم مطابقة"),
@@ -173,7 +178,7 @@ function home() {
     "BIN EISA Stocks — Research with perspective",
     "أسهم بن عيسى — رؤية أوسع للبحث",
   );
-  main.innerHTML = `<section class="home-hero"><div class="hero-copy"><span class="eyebrow">${L("A CLEARER VIEW OF THE MARKETS", "رؤية أوضح للأسواق")}</span><h1 class="hero-title">${L("Research with<br><em>perspective.</em>", "ابحث اليوم.<br><em>برؤية أوسع.</em>")}</h1><p>${L("Understand the companies. Follow the numbers. Bring your next investment decision into focus.", "تعرّف على الشركات. تابع الأرقام. كوّن رؤية أوضح لقرارك الاستثماري القادم.")}</p><div class="actions"><a class="button gold" href="/stocks">${L("Explore stocks", "استكشف الأسهم")} →</a><a class="text-link" href="https://bineisa.com/">${L("INVEST NOW", "استثمر الآن")} ↗</a></div></div><div class="hero-search"><span class="eyebrow">${L("YOUR RESEARCH STARTS HERE", "بحثك يبدأ هنا")}</span><h2>${L("Find your next company.", "اعثر على شركتك القادمة.")}</h2><p>${L("Search by company name or exchange symbol.", "ابحث باسم الشركة أو رمز السهم في البورصة.")}</p>${searchForm()}<p class="search-hint">${L("Company profiles, financials and price history.", "ملفات الشركات وبياناتها المالية وسجل الأسعار.")} <a href="/data-sources">${L("View data coverage ↗", "تغطية البيانات ↗")}</a></p></div></section><div class="market-strip"><span><span class="status-dot"></span>${state.status?.configured ? L("EODHD data connection configured", "تم إعداد اتصال EODHD") : L("Market data connection pending", "اتصال بيانات السوق قيد الإعداد")}</span><div class="strip-links"><span>${L("Quotes delayed 15–20 min", "الأسعار متأخرة 15–20 دقيقة")}</span><a href="/data-sources">${L("Data transparency ↗", "شفافية البيانات ↗")}</a></div></div>${state.status?.demo ? `<p class="demo-banner">${L("Provider demo connection — limited symbol access. Not a production data feed.", "اتصال تجريبي للمزود — رموز محدودة. ليس مصدر بيانات للإنتاج.")}</p>` : ""}<div class="workspace-grid"><section><div class="section-head"><div><h2>${L("Market overview", "نظرة على السوق")}</h2><p>${L("Discover companies. Start with the fundamentals.", "اكتشف الشركات وابدأ بأساسياتها.")}</p></div><a class="text-link" href="/stocks">${L("All stocks", "جميع الأسهم")} →</a></div><div class="panel"><div class="panel-head"><h3>${L("Leading companies", "الشركات الكبرى")}</h3><span class="tag">${e(state.exchange)} · ${L("By market cap", "حسب القيمة السوقية")}</span></div><div id="home-market"></div></div></section><aside class="side-stack"><div class="panel panel-pad"><span class="eyebrow">${L("YOUR PERSONAL VIEW", "رؤيتك الخاصة")}</span><h3>${L("Keep opportunities close.", "تابع الفرص عن قرب.")}</h3><p>${L("Build a watchlist of the companies you want to understand better.", "أنشئ قائمة بالشركات التي ترغب في فهمها بشكل أفضل.")}</p><a class="button" href="/watchlist">${L("Open my watchlist", "قائمة المراقبة")} →</a></div><div class="side-invest"><span class="eyebrow">BIN EISA</span><h3>${L("From research<br>to opportunity.", "من البحث<br>إلى الفرصة.")}</h3><p>${L("Meet the businesses behind the BIN EISA name.", "تعرّف على الأعمال التي تقف وراء اسم بن عيسى.")}</p><a class="button gold" href="https://bineisa.com/">${L("INVEST NOW", "استثمر الآن")} ↗</a></div></aside></div><div class="quick-links"><a href="/reports">${icon("report")}<span><b>${L("Read the fundamentals", "اقرأ الأساسيات")}</b><small>${L("Company financial reports", "التقارير المالية للشركات")}</small></span><span class="arrow">↗</span></a><a href="/news">${icon("news")}<span><b>${L("Follow the story", "تابع المستجدات")}</b><small>${L("The latest market headlines", "أحدث عناوين أخبار السوق")}</small></span><span class="arrow">↗</span></a><a href="/private-watchlist">${icon("lock")}<span><b>${L("Make room for your ideas", "مساحة لأفكارك")}</b><small>${L("Private stocks & research notes", "أسهم خاصة وملاحظات بحثية")}</small></span><span class="arrow">↗</span></a></div>${investCta()}`;
+  main.innerHTML = `<section class="home-hero"><div class="hero-copy"><span class="eyebrow">${L("A CLEARER VIEW OF THE MARKETS", "رؤية أوضح للأسواق")}</span><h1 class="hero-title">${L("Research with<br><em>perspective.</em>", "ابحث اليوم.<br><em>برؤية أوسع.</em>")}</h1><p>${L("Understand the companies. Follow the numbers. Bring your next investment decision into focus.", "تعرّف على الشركات. تابع الأرقام. كوّن رؤية أوضح لقرارك الاستثماري القادم.")}</p><div class="actions"><a class="button gold" href="/stocks">${L("Explore stocks", "استكشف الأسهم")} →</a><a class="text-link" href="https://bineisa.com/">${L("INVEST NOW", "استثمر الآن")} ↗</a></div></div><div class="hero-search"><span class="eyebrow">${L("YOUR RESEARCH STARTS HERE", "بحثك يبدأ هنا")}</span><h2>${L("Find your next company.", "اعثر على شركتك القادمة.")}</h2><p>${L("Search by company name or exchange symbol.", "ابحث باسم الشركة أو رمز السهم في البورصة.")}</p>${searchForm()}${priceOnly() ? `<div class="symbol-shortcuts">${state.status.symbols.map(s => `<a href="${stockUrl(s)}">${e(s.split(".")[0])} ↗</a>`).join("")}</div>` : ""}<p class="search-hint">${priceOnly() ? L("Company prices, history and research lists.", "أسعار الشركات وسجلها وقوائم البحث.") : L("Company profiles, financials and price history.", "ملفات الشركات وبياناتها المالية وسجل الأسعار.")} <a href="/data-sources">${L("View data coverage ↗", "تغطية البيانات ↗")}</a></p></div></section><div class="market-strip"><span><span class="status-dot"></span>${state.status?.configured ? L(`${state.status.provider} connection configured`, `تم إعداد اتصال ${state.status.provider}`) : L("Market data connection pending", "اتصال بيانات السوق قيد الإعداد")}</span><div class="strip-links"><span>${quoteLabel()}</span><a href="/data-sources">${L("Data transparency ↗", "شفافية البيانات ↗")}</a></div></div>${priceOnly() ? coverageNote() : ""}${state.status?.demo ? `<p class="demo-banner">${L("Provider demo connection — limited symbol access. Not a production data feed.", "اتصال تجريبي للمزود — رموز محدودة. ليس مصدر بيانات للإنتاج.")}</p>` : ""}<div class="workspace-grid"><section><div class="section-head"><div><h2>${L("Market overview", "نظرة على السوق")}</h2><p>${L("Discover companies. Start with the fundamentals.", "اكتشف الشركات وابدأ بأساسياتها.")}</p></div><a class="text-link" href="/stocks">${L("All stocks", "جميع الأسهم")} →</a></div><div class="panel"><div class="panel-head"><h3>${L("Research collection", "مجموعة البحث")}</h3><span class="tag">${e(state.exchange)} · ${priceOnly() ? L("7 companies", "7 شركات") : L("By market cap", "حسب القيمة السوقية")}</span></div><div id="home-market"></div></div></section><aside class="side-stack"><div class="panel panel-pad"><span class="eyebrow">${L("YOUR PERSONAL VIEW", "رؤيتك الخاصة")}</span><h3>${L("Keep opportunities close.", "تابع الفرص عن قرب.")}</h3><p>${L("Build a watchlist of the companies you want to understand better.", "أنشئ قائمة بالشركات التي ترغب في فهمها بشكل أفضل.")}</p><a class="button" href="/watchlist">${L("Open my watchlist", "قائمة المراقبة")} →</a></div><div class="side-invest"><span class="eyebrow">BIN EISA</span><h3>${L("From research<br>to opportunity.", "من البحث<br>إلى الفرصة.")}</h3><p>${L("Meet the businesses behind the BIN EISA name.", "تعرّف على الأعمال التي تقف وراء اسم بن عيسى.")}</p><a class="button gold" href="https://bineisa.com/">${L("INVEST NOW", "استثمر الآن")} ↗</a></div></aside></div><div class="quick-links"><a href="/reports">${icon("report")}<span><b>${priceOnly() ? L("Read the price report", "اقرأ تقرير الأسعار") : L("Read the fundamentals", "اقرأ الأساسيات")}</b><small>${priceOnly() ? L("History, range & trading volume", "السجل والنطاق وحجم التداول") : L("Company financial reports", "التقارير المالية للشركات")}</small></span><span class="arrow">↗</span></a><a href="/news">${icon("news")}<span><b>${L("Follow the story", "تابع المستجدات")}</b><small>${priceOnly() ? L("News connection pending", "اتصال الأخبار قيد الإعداد") : L("The latest market headlines", "أحدث عناوين أخبار السوق")}</small></span><span class="arrow">↗</span></a><a href="/private-watchlist">${icon("lock")}<span><b>${L("Make room for your ideas", "مساحة لأفكارك")}</b><small>${L("Private stocks & research notes", "أسهم خاصة وملاحظات بحثية")}</small></span><span class="arrow">↗</span></a></div>${investCta()}`;
   activeRefresh = () =>
     requestInto(
       "home-market",
@@ -184,6 +189,7 @@ function home() {
 }
 
 function filters() {
+  if (priceOnly()) return priceFilters(params.get("sort"));
   const sectors = [
     "Technology",
     "Healthcare",
@@ -239,6 +245,7 @@ async function loadExchanges() {
   }
 }
 function reportCards(rows, meta) {
+  if (priceOnly()) return priceCards(rows, meta);
   if (!rows.length)
     return empty(
       L("No company reports found", "لا توجد تقارير للشركات"),
@@ -257,17 +264,17 @@ function stockList(reports = false) {
         : L("Explore the markets.", "استكشف الأسواق."),
       reports
         ? L(
-            "Read company financials and provider analysis. Every figure comes from the connected data feed.",
-            "اقرأ البيانات المالية وتحليلات المزود. كل رقم يأتي من مصدر البيانات المتصل.",
+            priceOnly() ? "Explore daily prices, historical ranges and downloadable price reports." : "Read company financials and provider analysis. Every figure comes from the connected data feed.",
+            priceOnly() ? "استكشف الأسعار اليومية والنطاق التاريخي وتقارير الأسعار القابلة للتنزيل." : "اقرأ البيانات المالية وتحليلات المزود. كل رقم يأتي من مصدر البيانات المتصل.",
           )
         : L(
-            "Find companies, compare the fundamentals and build your own perspective.",
-            "ابحث عن الشركات وقارن أساسياتها وكوّن رؤيتك الخاصة.",
+            priceOnly() ? "Follow seven US companies, compare their price history and build your own research list." : "Find companies, compare the fundamentals and build your own perspective.",
+            priceOnly() ? "تابع سبع شركات أمريكية وقارن سجل أسعارها وأنشئ قائمة البحث الخاصة بك." : "ابحث عن الشركات وقارن أساسياتها وكوّن رؤيتك الخاصة.",
           ),
       searchForm(),
     ) +
     filters() +
-    `<div class="result-toolbar"><span>${reports ? L("Financial statements & analyst estimates", "قوائم مالية وتقديرات المحللين") : L("Stock screener · prices in the provider’s quote currency", "تصفية الأسهم · الأسعار بعملة المزود")}</span><a href="/data-sources">${L("End-of-day data ⓘ", "بيانات نهاية اليوم ⓘ")}</a></div><div id="results" ${reports ? "" : 'class="panel"'}></div><div class="research-note">${L("Missing figures are shown as —. Market data is sourced from EODHD; no prices or company financials are entered manually.", "البيانات غير المتوفرة تظهر بعلامة —. مصدر بيانات السوق هو EODHD؛ لا يتم إدخال الأسعار أو البيانات المالية يدوياً.")}</div>${investCta()}`;
+    `<div class="result-toolbar"><span>${reports ? (priceOnly() ? L("Price history & trading reports", "سجل الأسعار وتقارير التداول") : L("Financial statements & analyst estimates", "قوائم مالية وتقديرات المحللين")) : L("Stock screener · prices in the provider’s quote currency", "تصفية الأسهم · الأسعار بعملة المزود")}</span><a href="/data-sources">${L("End-of-day data ⓘ", "بيانات نهاية اليوم ⓘ")}</a></div><div id="results" ${reports ? "" : 'class="panel"'}></div><div class="research-note">${L(`Missing figures are shown as —. Market data comes from ${state.status?.provider || "the data provider"}; prices are not entered manually.`, `تظهر البيانات غير المتوفرة بعلامة —. مصدر البيانات هو ${state.status?.provider || "المزود"}؛ لا يتم إدخال الأسعار يدوياً.`)}</div>${investCta()}`;
   loadExchanges();
   document.getElementById("filters").addEventListener("submit", (event) => {
     event.preventDefault();
@@ -304,8 +311,8 @@ function searchPage() {
     heading(
       L("A company worth understanding.", "شركة تستحق أن تعرفها."),
       L(
-        "Search using a company name, ticker symbol or ISIN.",
-        "ابحث باستخدام اسم الشركة أو رمز السهم أو ISIN.",
+        priceOnly() ? "Search the seven-company collection by name or ticker symbol." : "Search using a company name, ticker symbol or ISIN.",
+        priceOnly() ? "ابحث في مجموعة الشركات السبع بالاسم أو رمز السهم." : "ابحث باستخدام اسم الشركة أو رمز السهم أو ISIN.",
       ),
     ) +
     `<div class="methodology">${searchForm(q)}<div class="filters"><div class="filter-field"><label for="exchange">${L("Search market", "سوق البحث")}</label><select id="exchange"><option value="${e(state.exchange)}">${e(state.exchange)}</option></select></div></div></div><div id="search-results" class="panel"></div>`;
@@ -378,6 +385,7 @@ function newsCards(rows) {
     .join("")}</div>`;
 }
 function newsPage() {
+  if (priceOnly()) { main.innerHTML = heading(L("Market news", "أخبار السوق"), L("Publisher coverage", "تغطية الناشرين")) + empty(L("News feed not connected", "الأخبار غير متصلة"), L("The current price-data connection does not include financial news. Explore company price reports while a news source is being arranged.", "لا يتضمن اتصال الأسعار الحالي أخباراً مالية. يمكنك استعراض تقارير أسعار الشركات حتى يتم ربط مصدر للأخبار."), `<a class="button gold" href="/reports">${L("Explore reports", "استعراض التقارير")}</a>`) + investCta(); return; }
   document.title = "Market news — BIN EISA Stocks";
   main.innerHTML =
     heading(
@@ -460,6 +468,7 @@ const STATEMENTS = {
   Cash_Flow: ["Cash flow", "التدفقات النقدية"],
 };
 function metrics(c) {
+  if (c.coverage === "price-history") return priceMetrics(c);
   const m = c.metrics;
   const values = [
     [
@@ -503,9 +512,11 @@ function statementContent() {
     .join("");
 }
 function reportContent(c, meta) {
+  if (c.coverage === "price-history") return priceReport(c, meta);
   return `<div class="section-head"><div><h2>${L("Company financial report", "التقرير المالي للشركة")}</h2><p>${L("Financial statements are shown in their reported currency.", "تُعرض القوائم المالية بعملة التقرير.")}</p></div><div class="actions"><button class="button compact" data-export>${L("Download CSV ↓", "تحميل CSV ↓")}</button><button class="button compact" data-print>${L("Print / PDF", "طباعة / PDF")}</button></div></div><div class="news-filter-row"><div class="segmented" aria-label="${L("Reporting period", "فترة التقرير")}"><button data-period="yearly" aria-pressed="${state.period === "yearly"}">${L("Annual", "سنوي")}</button><button data-period="quarterly" aria-pressed="${state.period === "quarterly"}">${L("Quarterly", "ربع سنوي")}</button></div><p class="muted">${L("Fundamentals updated", "تحديث البيانات المالية")}: ${e(date(c.updatedAt))}</p></div><div id="statements">${statementContent()}</div>${source(meta)}<div class="research-note">${L("Reports present provider-supplied company statements. Missing values remain blank (—); they are never converted to zero. These reports do not contain BIN EISA buy or sell recommendations.", "تعرض التقارير القوائم المالية الواردة من المزود. تظهر القيم غير المتوفرة بعلامة — ولا يتم تحويلها إلى صفر. لا تتضمن هذه التقارير توصيات شراء أو بيع صادرة عن بن عيسى.")}</div>${c.cik ? `<a class="text-link" href="https://www.sec.gov/edgar/browse/?CIK=${encodeURIComponent(c.cik)}&owner=exclude" target="_blank" rel="noopener noreferrer">${L("View original SEC filings", "عرض الإيداعات الأصلية لدى SEC")} ↗</a>` : ""}`;
 }
 function analysisContent(c) {
+  if (c.coverage === "price-history") return priceAnalysis(c);
   const a = c.analysts;
   return `<div class="panel panel-pad"><div class="section-head"><div><h2>${L("Analyst perspective", "رؤية المحللين")}</h2><p>${L("Consensus supplied by EODHD, where available.", "إجماع المحللين المقدم من EODHD، عند توفره.")}</p></div></div><div class="metric-grid"><div class="metric"><span>${L("Consensus target price", "السعر المستهدف المجمع")}</span><b>${fmt(a.TargetPrice)} <small>${e(c.currency || "")}</small></b></div><div class="metric"><span>${L("Provider rating (1–5)", "تصنيف المزود (1–5)")}</span><b>${fmt(a.Rating)}</b></div><div class="metric"><span>${L("Revenue growth YoY", "نمو الإيرادات سنوياً")}</span><b>${isNumber(c.metrics.QuarterlyRevenueGrowthYOY) ? pct(c.metrics.QuarterlyRevenueGrowthYOY * 100) : "—"}</b></div><div class="metric"><span>${L("Earnings growth YoY", "نمو الأرباح سنوياً")}</span><b>${isNumber(c.metrics.QuarterlyEarningsGrowthYOY) ? pct(c.metrics.QuarterlyEarningsGrowthYOY * 100) : "—"}</b></div></div><dl class="key-values">${[
     ["StrongBuy", L("Strong buy analysts", "محللو شراء قوي")],
@@ -586,22 +597,22 @@ async function loadQuote() {
           ),
         );
       const c = state.company;
-      return `<div class="price-block"><span class="price-value">${fmt(q.price)}</span><small>${e(c?.currency || "")}</small><span class="numeric ${color(q.changePercent)}">${pct(q.changePercent)} (${fmt(q.change)})</span></div><p class="price-meta">${L("Delayed 15–20 min · Quote as of", "متأخر 15–20 دقيقة · وقت السعر")} ${e(time(q.asOf))}${state.status?.demo ? " · PROVIDER DEMO" : ""}</p>`;
+      return `<div class="price-block"><span class="price-value">${fmt(q.price)}</span><small>${e(c?.currency || "")}</small><span class="numeric ${color(q.changePercent)}">${pct(q.changePercent)} (${fmt(q.change)})</span></div><p class="price-meta">${priceOnly() ? L("End-of-day close · Price date", "إغلاق نهاية اليوم · تاريخ السعر") : L("Delayed 15–20 min · Quote as of", "متأخر 15–20 دقيقة · وقت السعر")} ${e(time(q.asOf))}${state.status?.demo ? " · PROVIDER DEMO" : ""}</p>`;
     },
   );
 }
 function detailPanel(c, meta, tab) {
   if (tab === "financials") return reportContent(c, meta);
   if (tab === "analysis") return analysisContent(c);
-  if (tab === "news") return `<div id="stock-news"></div>`;
-  return `<div class="detail-grid"><section class="panel panel-pad"><div id="quote-area">${loading()}</div><div class="chart-toolbar"><h3>${L("Price history", "سجل الأسعار")}</h3><div class="segmented" aria-label="${L("Chart range", "فترة الرسم البياني")}">${["1M", "3M", "6M", "1Y", "5Y"].map((r) => `<button data-range="${r}" aria-pressed="${state.range === r}">${r}</button>`).join("")}</div></div><div id="chart-area">${loading()}</div></section><aside class="panel panel-pad"><span class="eyebrow">${L("COMPANY SNAPSHOT", "لمحة عن الشركة")}</span><dl class="key-values">${[
+  if (tab === "news") return priceOnly() ? empty(L("News feed not connected", "الأخبار غير متصلة"), L("Marketstack’s current connection supplies price data, not company news.", "يوفر اتصال Marketstack الحالي بيانات الأسعار ولا يوفر أخبار الشركات.")) : `<div id="stock-news"></div>`;
+  return `<div class="detail-grid"><section class="panel panel-pad"><div id="quote-area">${loading()}</div><div class="chart-toolbar"><h3>${L("Price history", "سجل الأسعار")}</h3><div class="segmented" aria-label="${L("Chart range", "فترة الرسم البياني")}">${(priceOnly() ? ["1M", "3M", "6M", "1Y"] : ["1M", "3M", "6M", "1Y", "5Y"]).map((r) => `<button data-range="${r}" aria-pressed="${state.range === r}">${r}</button>`).join("")}</div></div><div id="chart-area">${loading()}</div></section><aside class="panel panel-pad"><span class="eyebrow">${priceOnly() ? L("TRADING SESSION", "جلسة التداول") : L("COMPANY SNAPSHOT", "لمحة عن الشركة")}</span><dl class="key-values">${(priceOnly() ? [[L("Exchange", "البورصة"), c.exchange], [L("Open", "الافتتاح"), fmt(c.priceReport.open)], [L("Session high", "أعلى سعر في الجلسة"), fmt(c.priceReport.high)], [L("Session low", "أدنى سعر في الجلسة"), fmt(c.priceReport.low)], [L("Volume", "الحجم"), compact(c.priceReport.volume)], [L("Currency", "العملة"), c.currency]] : [
     [L("Exchange", "البورصة"), c.exchange],
     [L("Sector", "القطاع"), c.sector],
     [L("Industry", "الصناعة"), c.industry],
     [L("Country", "الدولة"), c.country],
     [L("Employees", "الموظفون"), compact(c.employees)],
     [L("IPO date", "تاريخ الإدراج"), date(c.ipoDate)],
-  ]
+  ])
     .map(([k, v]) => `<div><dt>${k}</dt><dd>${e(v || "—")}</dd></div>`)
     .join(
       "",
@@ -616,7 +627,7 @@ async function stockDetail(report = false) {
   document.title = `${symbol} — BIN EISA Stocks`;
   main.innerHTML = `<nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">${L("Overview", "الرئيسية")}</a><span>/</span><a href="${report ? "/reports" : "/stocks"}">${report ? L("Reports", "التقارير") : L("Stocks", "الأسهم")}</a><span>/</span><span>${e(symbol)}</span></nav><div class="stock-heading"><div class="stock-identity"><span class="ticker-monogram">${e(symbol?.split(".")[0].slice(0, 3))}</span><div><h1 id="company-title">${e(symbol)}</h1><p id="company-subtitle">${L("Company research & analysis", "أبحاث وتحليلات الشركة")}</p></div></div><div class="actions"><button class="button" data-save="${e(symbol)}" data-kind="watchlist">☆ ${L("Watchlist", "قائمة المراقبة")}</button><button class="button" data-save="${e(symbol)}" data-kind="private">${L("Save privately", "حفظ خاص")}</button><a class="button gold" href="https://bineisa.com/">${L("INVEST NOW ↗", "استثمر الآن ↗")}</a></div></div><nav class="detail-tabs" aria-label="${L("Stock sections", "أقسام السهم")}">${[
     ["overview", L("Overview", "نظرة عامة")],
-    ["financials", L("Financials & reports", "البيانات والتقارير المالية")],
+    ["financials", priceOnly() ? L("Price report", "تقرير الأسعار") : L("Financials & reports", "البيانات والتقارير المالية")],
     ["analysis", L("Analysis", "التحليل")],
     ["news", L("Company news", "أخبار الشركة")],
   ]
@@ -672,8 +683,8 @@ async function watchPage(privateList = false) {
             "مجموعة خاصة من الأسهم المدرجة والملاحظات البحثية، لا يراها إلا حسابك المسجل.",
           )
         : L(
-            "Keep the companies you follow together, with delayed quotes from the market-data provider.",
-            "اجمع الشركات التي تتابعها مع أسعار متأخرة من مزود بيانات السوق.",
+            priceOnly() ? "Keep the companies you follow together, with dated closing prices from Marketstack." : "Keep the companies you follow together, with delayed quotes from the market-data provider.",
+            priceOnly() ? "اجمع الشركات التي تتابعها مع أسعار إغلاق مؤرخة من Marketstack." : "اجمع الشركات التي تتابعها مع أسعار متأخرة من مزود بيانات السوق.",
           ),
       `<a class="button gold" href="/search">+ ${L("Find a stock", "ابحث عن سهم")}</a>`,
     ) +
@@ -724,7 +735,7 @@ async function watchPage(privateList = false) {
           `<article class="watch-item"><div class="watch-heading"><div><a href="${stockUrl(r.symbol)}"><h2>${e(r.symbol)}</h2></a><span id="quote-${e(r.symbol)}" class="muted">${L("Loading quote…", "تحميل السعر…")}</span></div><div class="actions"><a class="text-link" href="${reportUrl(r.symbol)}">${L("Report", "التقرير")} ↗</a><button class="button compact" data-save="${e(r.symbol)}" data-kind="${kind}">${L("Remove", "إزالة")}</button></div></div>${privateList ? `<form class="private-note" data-note="${e(r.symbol)}"><label for="note-${e(r.symbol)}">${L("Private research note", "ملاحظة بحثية خاصة")}</label><textarea id="note-${e(r.symbol)}" name="note" rows="3" maxlength="2000" placeholder="${L("What do you want to understand about this company?", "ما الذي تريد فهمه عن هذه الشركة؟")}">${e(r.note)}</textarea><div class="actions"><button class="button compact">${L("Save note", "حفظ الملاحظة")}</button><small class="muted">${L("Only you can see this note · 2,000 characters max", "أنت فقط تستطيع رؤية هذه الملاحظة · 2,000 حرف كحد أقصى")}</small></div></form>` : ""}</article>`,
       )
       .join("") +
-    `<div class="data-note">EODHD · ${L("Quotes delayed 15–20 minutes", "أسعار متأخرة 15–20 دقيقة")}${state.status?.demo ? " · PROVIDER DEMO" : ""}</div>`;
+    `<div class="data-note">${e(state.status?.provider || "EODHD")} · ${quoteLabel()}${state.status?.demo ? " · PROVIDER DEMO" : ""}</div>`;
   for (let i = 0; i < rows.length; i += 20) {
     const group = rows.slice(i, i + 20);
     try {
@@ -755,6 +766,7 @@ async function watchPage(privateList = false) {
 }
 
 function methodology() {
+  if (priceOnly()) { main.innerHTML = priceMethodology() + investCta(); return; }
   document.title = "Data & methodology — BIN EISA Stocks";
   main.innerHTML = `<div class="methodology">${heading(L("Good research starts with clarity.", "البحث الجيد يبدأ بالوضوح."), L("Understand where the numbers come from, how current they are and what the platform supports.", "تعرّف على مصدر الأرقام ومدى حداثتها وما تدعمه المنصة."))}<section><h2>${L("Market coverage", "تغطية الأسواق")}</h2><p>${L("EODHD supplies the market-data integration. US equities are the initial configured market, matching the public focus of the reference platform. Additional exchanges can be enabled only after coverage and public-display rights are confirmed with the provider.", "يُستخدم EODHD لربط بيانات السوق. الأسهم الأمريكية هي السوق المهيأ مبدئياً. يمكن تفعيل بورصات إضافية بعد تأكيد التغطية وحقوق العرض العام مع المزود.")}</p><p class="body-copy">${state.status?.configured ? L("A provider credential is configured. Availability of each dataset still depends on the subscription and provider response.", "تم إعداد بيانات اتصال المزود. يعتمد توفر كل مجموعة بيانات على الاشتراك واستجابة المزود.") : L("The market-data connection has not been activated. Stock prices and financials remain unavailable until the provider is configured.", "لم يتم تفعيل اتصال بيانات السوق. تبقى الأسعار والبيانات المالية غير متوفرة حتى إعداد المزود.")}</p><a class="text-link" href="https://eodhd.com/financial-apis/quick-start-with-our-financial-data-apis" target="_blank" rel="noopener noreferrer">${L("Provider coverage documentation", "توثيق تغطية المزود")} ↗</a></section><section><h2>${L("Prices and timestamps", "الأسعار وأوقات التحديث")}</h2><p>${L("Stock-detail and watchlist quotes use EODHD’s delayed snapshot feed, generally 15–20 minutes behind. The stock directory and screener show end-of-day prices. Historical charts use adjusted daily closes, which account for corporate actions. They are not intraday trading charts. A quote timestamp is different from the time we fetched or cached the response.", "تستخدم صفحات الأسهم وقوائم المراقبة أسعار EODHD المتأخرة عادةً 15–20 دقيقة. يعرض الدليل وقائمة التصفية أسعار نهاية اليوم. تستخدم الرسوم أسعار الإغلاق اليومية المعدلة للأحداث المؤسسية وليست رسوماً لحظية للتداول. يختلف توقيت السعر عن وقت جلب الاستجابة أو تخزينها مؤقتاً.")}</p></section><section><h2>${L("Financial reports and analysis", "التقارير والتحليل المالي")}</h2><p>${L("Reports display provider-supplied annual and quarterly statements, company metrics and analyst consensus where available. A report is a structured view of data, not a commissioned research opinion. Targets and ratings are attributed to the provider. Missing information is shown as —, never invented.", "تعرض التقارير القوائم السنوية والربع سنوية ومؤشرات الشركات وإجماع المحللين المتوفر من المزود. التقرير عرض منظم للبيانات وليس رأياً بحثياً مكلفاً. تُنسب الأهداف والتصنيفات للمزود. تظهر البيانات غير المتوفرة بعلامة — ولا يتم اختلاقها.")}</p></section><section><h2>${L("News and sentiment", "الأخبار والتصنيفات")}</h2><p>${L("Headlines link to the original publisher. Sentiment is supplied by EODHD: above 0.1 is positive, below −0.1 is negative, and the interval between is neutral. Articles without a score are unrated. These classifications describe text sentiment, not investment suitability.", "ترتبط العناوين بالناشر الأصلي. يوفر EODHD درجات التصنيف: أعلى من 0.1 إيجابي، أقل من −0.1 سلبي، وبينهما محايد. الأخبار بلا درجة غير مصنفة. تصف هذه التصنيفات محتوى النص ولا تحدد ملاءمة الاستثمار.")}</p></section><section><h2>${L("Private lists and accounts", "القوائم الخاصة والحسابات")}</h2><p>${L("Guest watchlists and saved headlines stay in your browser. Signed-in stock lists and private notes are stored in Supabase and protected by policies restricting access to the owning account. BIN EISA Stocks accounts and bineisa.com accounts are separate; links connect the sites, not account credentials.", "تبقى قوائم الزائر والأخبار المحفوظة في المتصفح. تُخزن قوائم الحساب والملاحظات الخاصة في Supabase مع سياسات تقصر الوصول على صاحب الحساب. حسابات أسهم بن عيسى وحسابات bineisa.com منفصلة؛ تربط الروابط الموقعين ولا تشارك بيانات تسجيل الدخول.")}</p></section><section><h2>${L("Shariah-screening coverage", "تغطية التصنيف الشرعي")}</h2><p>${L("No Shariah-screening provider is connected. Compliance labels and purification ratios require separately licensed, sourced data and are not currently displayed.", "لم يتم ربط مزود للتصنيف الشرعي. تتطلب تصنيفات التوافق ونسب التطهير بيانات مرخصة ذات مصدر مستقل، ولا يتم عرضها حالياً.")}</p></section><section><h2>${L("Questions about the platform?", "استفسارات حول المنصة؟")}</h2><p>BinEisa General Trading LLC<br><a href="mailto:info@bineisa.com">info@bineisa.com</a> · <a href="tel:+971543366554" dir="ltr">+971 54 336 6554</a></p></section></div>${investCta()}`;
 }
@@ -829,6 +841,11 @@ main.addEventListener("click", async (event) => {
   if (btn.hasAttribute("data-export")) {
     const c = state.company;
     if (!c) return;
+    if (c.coverage === "price-history") {
+      const history = await api("history", { symbol: c.symbol, range:"1Y" });
+      downloadCsv(`BIN-EISA-${c.symbol}-prices.csv`, [["BIN EISA Stocks", c.symbol, "Source: Marketstack", "Adjusted daily closes"], ["Date", "Adjusted close", "Volume", "Currency"], ...history.data.map(r => [r.date,r.close,r.volume,c.currency])]);
+      return;
+    }
     const rows = [
       [
         "BIN EISA Stocks",

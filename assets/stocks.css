@@ -1828,3 +1828,8 @@ html[dir="rtl"] .toast {
     width: auto;
   }
 }
+
+/* Compact research controls preserve the BIN EISA identity on mobile. */
+.symbol-shortcuts{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.symbol-shortcuts a{border:1px solid var(--line);padding:8px 12px;border-radius:6px;font-size:13px;color:var(--gold)}.symbol-shortcuts a:hover,.symbol-shortcuts a:focus-visible{background:rgba(201,162,75,.12)}.coverage-note{display:flex;align-items:center;gap:20px;border-inline-start:3px solid var(--gold);background:rgba(201,162,75,.05);padding:20px 24px;margin:24px 0}.coverage-note p{font-size:13px;line-height:1.6;margin:6px 0 0;color:var(--muted)}.coverage-note>a{margin-inline-start:auto;white-space:nowrap;font-size:13px;color:var(--gold)}@media(max-width:700px){.coverage-note{align-items:flex-start;flex-direction:column;gap:12px;padding:16px}.coverage-note>a{margin-inline-start:0}.symbol-shortcuts a{min-height:44px;display:flex;align-items:center}}
+
+.price-filters{display:flex;align-items:end;gap:12px}.price-filters .filter-field{flex:1;max-width:330px}@media(max-width:700px){.price-filters{flex-wrap:wrap}.price-filters .filter-field{flex-basis:100%;max-width:none}}

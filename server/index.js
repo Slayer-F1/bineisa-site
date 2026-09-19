@@ -5,6 +5,8 @@ import path from "node:path";
 import { createHash } from "node:crypto";
 import { createStore } from "./cache.js";
 import { createMarket, ApiError } from "./market.js";
+import { createMarketstack } from "./marketstack.js";
+import { createPersistentStore } from "./persistent-cache.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const csp =
@@ -135,6 +137,7 @@ export function createApp({
                 defaultExchange,
                 quoteType: "delayed",
                 delayMinutes: "15–20",
+                ...market.status,
               },
             };
             break;
@@ -252,7 +255,11 @@ if (
   process.argv[1] &&
   path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
 ) {
-  const key = process.env.EODHD_API_KEY?.trim();
+  const provider = process.env.MARKET_PROVIDER || "eodhd";
+  if (!["eodhd", "marketstack"].includes(provider)) throw Error("Unknown market provider.");
+  if (provider === "marketstack" && process.env.NODE_ENV === "production")
+    throw Error("The Marketstack free connection is local-preview only. Arrange commercial access before production activation.");
+  const key = (provider === "marketstack" ? process.env.MARKETSTACK_API_KEY : process.env.EODHD_API_KEY)?.trim();
   const demo = key?.toLowerCase() === "demo";
   if (demo && process.env.NODE_ENV === "production")
     throw Error("Demo credentials are forbidden in production.");
@@ -261,12 +268,16 @@ if (
     .map((s) => s.trim().toUpperCase())
     .filter((s) => /^[A-Z0-9]{1,12}$/.test(s));
   if (!exchanges.length) throw Error("Configure at least one market exchange.");
-  const store = await createStore(process.env.REDIS_URL);
-  const market = createMarket({
+  const store = provider === "marketstack" && !process.env.REDIS_URL
+    ? await createPersistentStore(process.env.MARKET_CACHE_DIR || path.join(root, "artifacts", "market-cache"))
+    : await createStore(process.env.REDIS_URL);
+  const market = (provider === "marketstack" ? createMarketstack : createMarket)({
     key,
     exchanges,
     store,
     budget: Number(process.env.PROVIDER_REQUESTS_PER_MINUTE) || 120,
+    cacheSeconds: Number(process.env.MARKETSTACK_CACHE_SECONDS) || 604800,
+    monthlyBudget: Number(process.env.MARKETSTACK_MONTHLY_BUDGET) || 80,
   });
   const app = createApp({
     market,

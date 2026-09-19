@@ -20,3 +20,9 @@ Public pages were inspected during September 10–14, 2026. AliStocks is used as
 ## Completion boundary
 
 The new code implements the requested research workflows and a real provider adapter. It is not yet a fully launched replacement: full data entitlement, deployed Supabase migration, real-account acceptance testing, host deployment and the Shopify reverse link remain external activation work. This document intentionally does not certify full feature parity with inaccessible private screens or with the reference's proprietary analysis and Shariah data.
+
+## September 19: free local preview
+
+The owner supplied a Marketstack Free key and explicitly chose local preview only. The visible AliStocks analytics table showed 1–7 of 7 symbols: AMD, APPF, ARLO, AVGO, AZZ, BCC and BHE. The preview uses exactly these identifiers, with all names and market values obtained independently from Marketstack. This verifies the visible collection, not any undisclosed or private stocks.
+
+The preview keeps BIN EISA black/gold branding and the existing research navigation. It adds seven homepage stock shortcuts, a volume/exchange/closing-price table, provider-backed search, individual price charts, calculated price statistics and downloadable price reports. Unlike the broader EODHD implementation, the free preview does not claim financial statements, market cap, analyst targets, news or Sharia-screening coverage. Those missing sources prevent full functional parity with AliStocks. See [Marketstack preview](MARKETSTACK-PREVIEW.md).

@@ -55,3 +55,13 @@ This verifies the container correction without disabling healthchecks or requiri
 Supabase returned Healthy after recovery. Public Auth health/settings checks returned HTTP 200. The production Site URL and sign-in callbacks were saved and verified in the dashboard. Custom SMTP is disabled; no public signup email or OTP verification has been completed.
 
 The dashboard is configured for 8-digit email OTPs. Four focused regression tests pass: preserve and submit all eight digits (including Arabic numeral entry), retain six-digit SMS support, reject incomplete input and provider-rejected tokens, and allow eight digits through both HTML forms. The full suite passes 33 tests (30 top-level and three readiness cases); syntax checks pass for 19 modules. These controlled tests do not substitute for live email delivery.
+
+## Marketstack local preview — September 19
+
+- Verified the supplied credential with one real AMD history request, then loaded all seven directory stocks through the new local server adapter. The API returned actual provider names, USD prices, exchange venues, volumes and September 18 price timestamps. No static market fixtures were substituted in the preview.
+- Verified homepage shortcuts, seven-row directory, Broadcom search returning AVGO, AMD stock details, 1M/1Y chart switching, moving-average/range statistics and the trading-session panel.
+- Saved AMD to the guest watchlist and confirmed persistence after navigation. Account/private-list acceptance remains outstanding.
+- Downloaded the AMD price CSV through the UI and inspected the file in Downloads; it contains the Marketstack attribution, dates, adjusted closes, volumes and currency. Browser download-event monitoring timed out, but the file itself confirms success.
+- At 390 × 844, the stock directory and Broadcom detail in Arabic/RTL had document scrollWidth = clientWidth = 375 (scrollbar accounts for remaining width). Inspected the mobile chart, tabs and Invest Now. Reset the viewport afterward.
+- The full suite passes 41 tests: cache coalescing, monthly cap, persisted quota, provider error sanitization, data validation, seven-symbol selection and production blocking are covered along with the existing suite. Syntax and ecosystem checks pass for 23 modules.
+- The free key exists only in ignored local environment configuration; data/cache artifacts are ignored. Public production remains on its existing configuration. No Coolify secrets, deployment or plan were changed.
