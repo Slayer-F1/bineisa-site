@@ -101,10 +101,10 @@ test('disk cache retains data and monthly quota across process restarts', async 
   }
 });
 
-test('the free Marketstack preview cannot start in production', () => {
+test('Marketstack still rejects demo credentials in production', () => {
   const result=spawnSync(process.execPath,[fileURLToPath(new URL('../server/index.js',import.meta.url))], {
-    env:{...process.env, NODE_ENV:'production', MARKET_PROVIDER:'marketstack'}, encoding:'utf8',timeout:5000,
+    env:{...process.env, NODE_ENV:'production', MARKET_PROVIDER:'marketstack', MARKETSTACK_API_KEY:'demo'}, encoding:'utf8',timeout:5000,
   });
   assert.notEqual(result.status,0);
-  assert.match(result.stderr,/local-preview only/);
+  assert.match(result.stderr,/Demo credentials are forbidden/);
 });

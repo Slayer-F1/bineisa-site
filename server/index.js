@@ -257,8 +257,6 @@ if (
 ) {
   const provider = process.env.MARKET_PROVIDER || "eodhd";
   if (!["eodhd", "marketstack"].includes(provider)) throw Error("Unknown market provider.");
-  if (provider === "marketstack" && process.env.NODE_ENV === "production")
-    throw Error("The Marketstack free connection is local-preview only. Arrange commercial access before production activation.");
   const key = (provider === "marketstack" ? process.env.MARKETSTACK_API_KEY : process.env.EODHD_API_KEY)?.trim();
   const demo = key?.toLowerCase() === "demo";
   if (demo && process.env.NODE_ENV === "production")

@@ -1,6 +1,6 @@
 # Marketstack local preview — September 19, 2026
 
-The owner chose **Keep the free local preview**. Do not activate this key on Coolify or the public site. No subscription was purchased or upgraded. The backend rejects Marketstack preview mode when `NODE_ENV=production`.
+The owner initially chose a local preview, then explicitly requested public deployment using the free plan after being informed of its non-commercial designation. No subscription was purchased or upgraded. This instruction does not change the provider’s terms or establish commercial rights.
 
 ## Start
 
@@ -44,8 +44,8 @@ Each company refreshes on demand after seven days. Seven weekly company requests
 
 Single-process data and quota persistence uses `artifacts/market-cache/market-cache.json`, written atomically. Do not delete it to refresh the website: doing so also discards the local quota history. The cache contains data and hashed key namespaces, not credentials. It is not a substitute for shared Redis when running replicas. The UI displays actual price dates and weekly refresh timing; these are not live prices.
 
-## Before any public activation
+## Public deployment
 
-Arrange an appropriate commercial data agreement, reassess request volume and update frequency, and review unsupported dataset sources. Changing a setting does not obtain those rights or add financial/news/Sharia datasets. Keep the current EODHD production path separate until an explicitly approved public data configuration is ready.
+Set MARKET_PROVIDER=marketstack and store MARKETSTACK_API_KEY as a runtime-only secret in Coolify. Set MARKET_CACHE_DIR=/app/artifacts/market-cache and mount a named persistent volume there. Run one replica with the default weekly refresh and 80-request monthly cap. The EODHD adapter remains available via MARKET_PROVIDER=eodhd. Public activation does not add financial/news/Sharia datasets or establish commercial data rights.
 
 Registration email delivery and the Supabase watchlist migration remain separate outstanding setup work from the earlier deployment; this preview does not certify signed-in acceptance.

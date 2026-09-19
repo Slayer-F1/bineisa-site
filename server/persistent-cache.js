@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile, rename } from 'node:fs/promises';
 import path from 'node:path';
 import { MemoryStore } from './cache.js';
 
-// Single-process disk cache for a small local preview. Use Redis for replicas.
+// Single-process disk cache. Mount persistent storage in production; use Redis for replicas.
 // Persists provider responses and quota counters, never API credentials or client IPs.
 export async function createPersistentStore(directory) {
   await mkdir(directory, { recursive:true });

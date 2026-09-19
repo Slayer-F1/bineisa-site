@@ -12,6 +12,7 @@ COPY --chown=node:node account ./account
 COPY --chown=node:node legal ./legal
 COPY --chown=node:node index.html company.html 404.html ./
 ENV NODE_ENV=production HOST=0.0.0.0 PORT=80
+RUN mkdir -p /app/artifacts/market-cache && chown -R node:node /app/artifacts
 USER node
 EXPOSE 80
 # Keep research/account pages routable while market data is being configured.
