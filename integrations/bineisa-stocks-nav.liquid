@@ -1,16 +1,21 @@
 {% comment %}
   BIN EISA main Shopify site: render this snippet in the header and/or footer.
-  All styles are scoped. The link does not share accounts or credentials.
+  It links to the BIN EISA Stocks research platform. All styles are scoped to the
+  .bineisa-stocks-link class and use the BIN EISA design-pack palette
+  (navy #101826, gold #A8844F, hairline #E2E2DE). The link does not share
+  accounts or credentials.
   {% render 'bineisa-stocks-nav' %}
 {% endcomment %}
 <a class="bineisa-stocks-link" href="https://bineisastocks.com/" aria-label="BIN EISA Stocks — stock research and analysis">
-  <span>BIN EISA <strong>STOCKS</strong></span>
-  <span>{% if request.locale.iso_code == 'ar' %}أبحاث وتحليلات الأسهم{% else %}Stock research & analysis{% endif %} ↗</span>
+  <span class="bineisa-stocks-link__name">BIN EISA <strong>STOCKS</strong></span>
+  <span class="bineisa-stocks-link__tag">{% if request.locale.iso_code == 'ar' %}أبحاث وتحليلات الأسهم{% else %}Stock research &amp; analysis{% endif %} ↗</span>
 </a>
 <style>
-  .bineisa-stocks-link{display:flex;align-items:center;justify-content:space-between;gap:1.25rem;border:1px solid #c9a24b66;border-radius:4px;padding:12px 16px;background:#141510;color:#e4cf99;text-decoration:none;min-height:44px;font-family:inherit;font-size:12px}
-  .bineisa-stocks-link strong{letter-spacing:.12em;font-size:10px;margin-inline-start:7px;font-weight:500}
-  .bineisa-stocks-link:hover{background:#222219;border-color:#c9a24b}
-  .bineisa-stocks-link:focus-visible{outline:2px solid #e4cf99;outline-offset:4px}
+  .bineisa-stocks-link{display:flex;align-items:center;justify-content:space-between;gap:1.25rem;border:1px solid #E2E2DE;border-radius:2px;padding:12px 18px;background:#fff;color:#101826;text-decoration:none;min-height:44px;font-family:inherit;font-size:12px;box-shadow:0 1px 2px rgba(16,24,38,.04)}
+  .bineisa-stocks-link__name{font-weight:700;letter-spacing:.04em;font-size:13px}
+  .bineisa-stocks-link strong{letter-spacing:.3em;font-size:9px;margin-inline-start:7px;font-weight:600;color:#8A6A35}
+  .bineisa-stocks-link__tag{color:#4A5160;font-weight:500}
+  .bineisa-stocks-link:hover{border-color:#A8844F;background:#FBF6EA}
+  .bineisa-stocks-link:focus-visible{outline:2px solid #A8844F;outline-offset:4px}
   @media(max-width:480px){.bineisa-stocks-link{flex-wrap:wrap;gap:6px}}
 </style>

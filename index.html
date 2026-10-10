@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#10110f" />
+    <meta name="theme-color" content="#ffffff" />
     <title>BIN EISA Stocks — Research with perspective</title>
     <meta
       name="description"
@@ -14,105 +14,33 @@
       property="og:description"
       content="Stock research, company financials and market perspective. The BIN EISA ecosystem."
     />
-    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" /><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Marcellus&family=Hanken+Grotesk:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&family=Amiri:wght@400;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/assets/stocks.css" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <div class="ecosystem-bar">
-      <div class="wrap">
-        <span
-          >BIN EISA <span class="dim">/</span>
-          <span data-copy="researchPlatform"
-            >Stock research & analysis</span
-          ></span
-        ><a href="https://bineisa.com/" data-copy="mainWebsite"
-          >Visit the main BIN EISA website ↗</a
-        >
-      </div>
-    </div>
     <header class="market-header">
       <div class="wrap header-row">
-        <a class="stock-brand" href="/" aria-label="BIN EISA Stocks home"
-          ><span class="brand-mark">BE</span
-          ><span><b>BIN EISA</b><small>STOCKS</small></span></a
-        >
+        <a class="stock-brand" href="/" aria-label="BIN EISA Stocks home"><img class="brand-mark" src="/assets/logo-mark.svg" alt="" width="55" height="40"><span class="brand-rule" aria-hidden="true"></span><span class="brand-text"><img class="brand-wordmark" src="/assets/logo-wordmark.svg" alt="BIN EISA" width="91" height="15"><small data-copy="brandSub">STOCKS</small></span></a>
         <nav class="desktop-nav" aria-label="Main navigation">
-          <a href="/stocks" data-copy="stocks">Stocks</a
-          ><a href="/reports" data-copy="reports">Reports</a
-          ><a href="/news" data-copy="news">News</a
-          ><a href="/watchlist" data-copy="watchlist">Watchlist</a
-          ><a href="/private-watchlist" data-copy="privateStocks"
-            >Private stocks</a
-          >
+          <a href="/stocks" data-copy="stocks">Stocks</a><a href="/reports" data-copy="reports">Reports</a><a href="/news" data-copy="news">News</a><a href="/watchlist" data-copy="watchlist">Watchlist</a><a href="/private-watchlist" data-copy="privateStocks">Private stocks</a>
         </nav>
         <div class="header-tools">
-          <a class="icon-button" href="/search" aria-label="Search stocks"
-            ><svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-            >
-              <circle cx="10.5" cy="10.5" r="6.5" />
-              <path d="m16 16 5 5" /></svg></a
-          ><button
-            class="language-button"
-            id="stock-language"
-            type="button"
-            aria-label="Switch language"
-          >
-            عربي</button
-          ><a
-            class="login-link"
-            id="authLink"
-            href="/auth/login"
-            data-account-href="/account/"
-            data-copy="signIn"
-            >Sign in</a
-          ><a
-            class="button gold compact"
-            href="https://bineisa.com/"
-            data-copy="invest"
-            >INVEST NOW ↗</a
-          ><button
-            class="icon-button mobile-menu"
-            id="menuBtn"
-            aria-label="Open navigation"
-            aria-expanded="false"
-            aria-controls="mobileNav"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-            >
-              <path d="M4 7h16M4 12h16M4 17h16" />
-            </svg>
-          </button>
+          <a class="icon-button" href="/search" aria-label="Search stocks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></svg></a>
+          <button class="language-button" id="stock-language" type="button" aria-label="Switch language">عربي</button>
+          <a class="login-link" id="authLink" href="/auth/login" data-account-href="/account/" data-copy="signIn">Sign in</a>
+          <a class="button primary compact main-site-link" href="https://bineisa.com/" data-copy="mainSite">Main website ↗</a>
+          <button class="icon-button mobile-menu" id="menuBtn" aria-label="Open navigation" aria-expanded="false" aria-controls="mobileNav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16" /></svg></button>
         </div>
       </div>
-      <nav
-        class="mobile-nav wrap"
-        id="mobileNav"
-        aria-label="Mobile navigation"
-      >
-        <a href="/" data-copy="overview">Overview</a
-        ><a href="/stocks" data-copy="stocks">Stocks</a
-        ><a href="/reports" data-copy="reports">Reports</a
-        ><a href="/news" data-copy="news">News</a
-        ><a href="/watchlist" data-copy="watchlist">Watchlist</a
-        ><a href="/private-watchlist" data-copy="privateStocks"
-          >Private stocks</a
-        ><a href="/search" data-copy="search">Search</a
-        ><a href="/auth/login" data-copy="account">Account</a>
+      <nav class="mobile-nav wrap" id="mobileNav" aria-label="Mobile navigation">
+        <a href="/" data-copy="overview">Overview</a><a href="/stocks" data-copy="stocks">Stocks</a><a href="/reports" data-copy="reports">Reports</a><a href="/news" data-copy="news">News</a><a href="/watchlist" data-copy="watchlist">Watchlist</a><a href="/private-watchlist" data-copy="privateStocks">Private stocks</a><a href="/search" data-copy="search">Search</a><a href="/auth/login" data-copy="account">Account</a><a class="main-site-mobile" href="https://bineisa.com/" data-copy="mainSite">Main website ↗</a>
       </nav>
     </header>
     <main id="main" class="wrap" tabindex="-1">

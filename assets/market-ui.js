@@ -130,8 +130,11 @@ export function source(meta) {
 export function searchForm(value = "") {
   return `<form class="search-form" role="search" action="/search">${icon("search")}<input type="search" name="q" value="${escape(value)}" aria-label="${L("Search by company or ticker", "ابحث باسم الشركة أو الرمز")}" placeholder="${L("Search a company or symbol…", "ابحث باسم الشركة أو الرمز…")}" maxlength="80" required autocomplete="off"><button type="submit" aria-label="${L("Search", "بحث")}">→</button></form>`;
 }
-export function investCta() {
-  return `<section class="ecosystem-cta"><div><span class="eyebrow">${L("THE BIN EISA ECOSYSTEM", "عالم بن عيسى")}</span><h2>${L("Your research. Your next step.", "بحثك اليوم. خطوتك القادمة.")}</h2><p>${L("Explore BIN EISA’s businesses and investment opportunities on our main website.", "اكتشف أعمال بن عيسى والفرص الاستثمارية عبر موقعنا الرئيسي.")}</p></div><a class="button gold" href="https://bineisa.com/">${L("INVEST NOW ↗", "استثمر الآن ↗")}</a></section>`;
+export function researchCta() {
+  return `<section class="cta-band"><div><span class="eyebrow">${L("YOUR RESEARCH STARTS HERE", "بحثك يبدأ هنا")}</span><h2>${L("Find your next company.", "اعثر على شركتك القادمة.")}</h2><p>${L("Search by company name or exchange symbol and read its prices, history and reports.", "ابحث باسم الشركة أو رمز السهم واطّلع على أسعارها وسجلها وتقاريرها.")}</p></div><div class="actions"><a class="button on-dark" href="/search">${L("Search stocks", "ابحث عن سهم")} →</a></div></section>`;
+}
+export function ecosystemCta() {
+  return `<section class="ecosystem-cta"><div><span class="eyebrow">${L("THE BIN EISA GROUP", "مجموعة بن عيسى")}</span><h2>${L("Part of BinEisa General Trading LLC.", "جزء من BinEisa General Trading LLC.")}</h2><p>${L("Learn about the businesses behind this platform on our main website.", "تعرّف على الأعمال التي تقف خلف هذه المنصة عبر موقعنا الرئيسي.")}</p></div><a class="button on-dark" href="https://bineisa.com/">${L("Visit bineisa.com ↗", "زيارة bineisa.com ↗")}</a></section>`;
 }
 export function pager(offset, hasMore) {
   return `<div class="pager"><button class="button compact" data-page="${Math.max(0, offset - 20)}" ${offset === 0 ? "disabled" : ""}>← ${L("Previous", "السابق")}</button><span>${L("Page", "الصفحة")} ${Math.floor(offset / 20) + 1}</span><button class="button compact" data-page="${offset + 20}" ${!hasMore ? "disabled" : ""}>${L("Next", "التالي")} →</button></div>`;

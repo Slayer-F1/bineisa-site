@@ -3,7 +3,7 @@ window.I18N = {
   en: {
     brand:"BIN EISA", brandSub:"General Trading",
     navAbout:"About", navSectors:"Our Sectors", navHow:"How We Work", navLearn:"Learn", navFaq:"FAQ", navContact:"Contact",
-    navSignin:"Sign In", navAccount:"My Account", navSignout:"Sign Out", navBack:"← Back to site",
+    navSignin:"Sign In", navAccount:"My Account", navSignout:"Sign Out", navBack:"← Back to site", mainSite:"Main website ↗",
     heroKicker:"United Arab Emirates · General Trading",
     heroTitle1:"Real Trade.", heroTitle2:"Real Businesses.",
     heroSub:"Bin Eisa General Trading is a UAE trading house operating across automotive import & trading, global product sourcing, phones & accessories, e-commerce and technology.",
@@ -155,7 +155,7 @@ window.I18N = {
   ar: {
     brand:"بن عيسى", brandSub:"للتجارة العامة",
     navAbout:"من نحن", navSectors:"قطاعاتنا", navHow:"كيف نعمل", navLearn:"تعلّم", navFaq:"الأسئلة الشائعة", navContact:"تواصل معنا",
-    navSignin:"تسجيل الدخول", navAccount:"حسابي", navSignout:"تسجيل الخروج", navBack:"→ العودة للموقع",
+    navSignin:"تسجيل الدخول", navAccount:"حسابي", navSignout:"تسجيل الخروج", navBack:"→ العودة للموقع", mainSite:"الموقع الرئيسي ↗",
     heroKicker:"الإمارات العربية المتحدة · تجارة عامة",
     heroTitle1:"تجارة حقيقية.", heroTitle2:"أعمال حقيقية.",
     heroSub:"بن عيسى للتجارة العامة بيت تجاري إماراتي يعمل في استيراد وتجارة المركبات، والتوريد العالمي للمنتجات، والهواتف والإكسسوارات، والتجارة الإلكترونية والتقنية.",

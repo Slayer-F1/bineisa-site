@@ -1,5 +1,5 @@
 Object.assign(window.I18N.en, {
-  brandSub: "Stocks",
+  brandSub: "STOCKS",
   authNote:
     "Your research account keeps your watchlists and private notes available across devices. It does not hold funds or execute trades.",
   accTitle: "Your research account",
@@ -8,7 +8,7 @@ Object.assign(window.I18N.en, {
     "Manage your profile, follow companies and keep your private research together.",
   accInsights: "BIN EISA member updates",
   footDisc:
-    "BIN EISA Stocks provides market research and company information. Prices may be delayed. Investment enquiries continue on bineisa.com. This platform does not execute trades or hold funds.",
+    "BIN EISA Stocks provides market research and company information. Prices may be delayed. Company information is available on bineisa.com. This platform does not execute trades or hold funds.",
   footCopy: "© 2026 BinEisa General Trading LLC. All rights reserved.",
   privS2p:
     "Account information includes your name, email and mobile number. Signed-in stock lists and private research notes are stored against your account. Guest watchlists and saved headlines remain in your browser. Enquiries contain the contact details and message you submit.",
@@ -34,7 +34,7 @@ Object.assign(window.I18N.ar, {
   accSub: "أدر ملفك وتابع الشركات واجمع أبحاثك الخاصة في مكان واحد.",
   accInsights: "تحديثات أعضاء بن عيسى",
   footDisc:
-    "تقدم أسهم بن عيسى أبحاث السوق ومعلومات الشركات. قد تكون الأسعار متأخرة. تُستكمل الاستفسارات الاستثمارية عبر bineisa.com. لا تنفذ هذه المنصة تداولات ولا تحتفظ بأموال.",
+    "تقدم أسهم بن عيسى أبحاث السوق ومعلومات الشركات. قد تكون الأسعار متأخرة. تتوفر معلومات الشركة عبر bineisa.com. لا تنفذ هذه المنصة تداولات ولا تحتفظ بأموال.",
   footCopy: "© 2026 BinEisa General Trading LLC. جميع الحقوق محفوظة.",
   privS2p:
     "تشمل معلومات الحساب الاسم والبريد الإلكتروني ورقم الجوال. تُخزن قوائم الأسهم والملاحظات البحثية الخاصة مع حسابك. تبقى قوائم الزائر والأخبار المحفوظة في المتصفح. تشمل الاستفسارات بيانات التواصل والرسالة التي تقدمها.",

@@ -1,6 +1,6 @@
 # BIN EISA Stocks
 
-Stock research platform for **bineisastocks.com**, in **Slayer-F1/bineisa-site**. The main business website is **https://bineisa.com/**. Every Invest Now link leads there.
+Stock research platform for **bineisastocks.com**, in **Slayer-F1/bineisa-site**. The main business website is **https://bineisa.com/**; the header, footer and group section link there as plain company links. This platform has no investment sign-up, plan or return content.
 
 The existing vanilla HTML/CSS/JavaScript stack and Supabase passwordless accounts are retained. A Node.js backend now supplies authenticated, cached EODHD data. The former corporate homepage is preserved in `company.html`.
 
@@ -28,7 +28,7 @@ EODHD's public `demo` token may be used explicitly in local development for its 
 - Provider news with publisher links, sentiment filters, device-local saving and sharing.
 - Device-local guest watchlist, account-backed watchlists, and private research lists with notes.
 - English/Arabic navigation, RTL layouts, mobile navigation and horizontally scrollable financial tables.
-- Official BIN EISA contacts and social links, persistent Invest Now actions, and a Shopify snippet for the reverse link on bineisa.com.
+- Official BIN EISA contacts and social links, a "Main website" link in every header, and a Shopify snippet for the reverse link on bineisa.com.
 
 ## Verification
 

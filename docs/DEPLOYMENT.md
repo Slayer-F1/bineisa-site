@@ -91,7 +91,7 @@ Monitor cache memory, readiness, provider 401/403/429, request latency, and auth
 
 ## 5. BIN EISA ecosystem
 
-All stocks-site Invest Now links point directly to `https://bineisa.com/`. Contact details are `info@bineisa.com`, `+971 54 336 6554`, Instagram `@bineisa.ae`, and TikTok `@bineisa_ae`.
+Every "Main website" link on the stocks site points to `https://bineisa.com/`. Contact details are `info@bineisa.com`, `+971 54 336 6554`, Instagram `@bineisa.ae`, and TikTok `@bineisa_ae`.
 
 Install `integrations/bineisa-stocks-nav.liquid` in the Shopify theme for bineisa.com and render it in the header and/or footer:
 

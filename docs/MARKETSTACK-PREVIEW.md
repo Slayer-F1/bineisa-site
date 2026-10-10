@@ -33,7 +33,7 @@ AliStocks' visible `/analytics` table showed **1–7 of 7** results on September
 
 - Seven company pages, search by provider name/symbol, closing prices, daily adjusted returns, volume, exchange and currency.
 - One year of adjusted daily history; 1M/3M/6M/1Y charts, historical range, 50/200-session moving averages, price reports, CSV and print/PDF.
-- Guest watchlists, existing account/private-list UI, black/gold identity, English/Arabic and Invest Now links.
+- Guest watchlists, existing account/private-list UI, the BIN EISA navy/gold identity, English/Arabic and Main website links.
 - Financial statements, market cap, analyst targets, intrinsic valuation, sector/industry screening, news and Sharia-screening data are **not supplied by this connection**. The UI states these limits and does not fabricate replacements.
 
 ## Quota and persistence

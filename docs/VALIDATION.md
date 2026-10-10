@@ -65,3 +65,22 @@ The dashboard is configured for 8-digit email OTPs. Four focused regression test
 - At 390 × 844, the stock directory and Broadcom detail in Arabic/RTL had document scrollWidth = clientWidth = 375 (scrollbar accounts for remaining width). Inspected the mobile chart, tabs and Invest Now. Reset the viewport afterward.
 - The full suite passes 41 tests: cache coalescing, monthly cap, persisted quota, provider error sanitization, data validation, seven-symbol selection and production blocking are covered along with the existing suite. Syntax and ecosystem checks pass for 23 modules.
 - The free key exists only in ignored local environment configuration; data/cache artifacts are ignored. Public production remains on its existing configuration. No Coolify secrets, deployment or plan were changed.
+
+## 2026-10-10: design-pack layout (design/new-layout)
+
+The new BIN EISA design pack (light page, navy `#101826`, brand gold `#A8844F`, Cormorant Garamond / Montserrat, Amiri for Arabic) replaced the previous black-and-gold theme on every page of this site.
+
+- Tokens, fonts and photography were taken from the pack; see [DESIGN-PACK.md](DESIGN-PACK.md) for the mapping and for what was deliberately not implemented.
+- The "Invest Now" buttons and the invest panels were replaced by a neutral "Main website" link. Statements above that mention Invest Now describe the earlier build.
+- `npm test`: 41 passed. `npm run check`: 23 modules, ecosystem links present on every page.
+- Mobile sweep at 390 × 844 for `/`, `/stocks`, `/stocks/AMD.US`, `/reports`, `/news`, `/watchlist`, `/private-watchlist`, `/search`, `/data-sources`, `/auth/login`, `/auth/register`, `/legal/*` and the 404 page: no element extends past the viewport outside the intentionally scrollable tables. The sweep found and fixed two real overflows (a `1fr` grid track growing to the table's width, and the auth header controls).
+- Arabic/RTL home page inspected at 1440 px: layout, hero fade direction, step arrows and numerals mirror correctly.
+- Live signed-in flows (OTP email delivery, account lists) were not re-run; they require the production Supabase mail configuration.
+
+### Logo pass (same branch)
+
+The pack's Figma file (public view link) contained the real brand mark, which the PDF exports did not. The placeholder four-bar glyph was replaced by the serif B with three bronze bars, the serif BIN EISA wordmark and the sheet's circular avatar/favicon; the apple-touch icon was added. See the Logo section of [DESIGN-PACK.md](DESIGN-PACK.md) — the SVGs are traces of the canvas, not the designer's exports.
+
+- Header, footer and sign-in emblem inspected at 1:1 in English and Arabic/RTL; the lockup mirrors and the product label switches to "الأسهم".
+- Mobile sweep at 390 × 844 on `/`, `/stocks`, `/auth/login`, `/auth/register`, `/legal/terms`: document scrollWidth = 390 on every route and the brand never reaches the header controls (brand right edge 155 px, controls start at 276 px or later).
+- The browser tab icon itself could not be inspected through the preview pane; the SVG is a plain circle with a group, and was checked by rendering it as an image on the sign-in page.
