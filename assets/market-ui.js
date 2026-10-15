@@ -133,6 +133,9 @@ export function searchForm(value = "") {
 export function researchCta() {
   return `<section class="cta-band"><div><span class="eyebrow">${L("YOUR RESEARCH STARTS HERE", "بحثك يبدأ هنا")}</span><h2>${L("Find your next company.", "اعثر على شركتك القادمة.")}</h2><p>${L("Search by company name or exchange symbol and read its prices, history and reports.", "ابحث باسم الشركة أو رمز السهم واطّلع على أسعارها وسجلها وتقاريرها.")}</p></div><div class="actions"><a class="button on-dark" href="/search">${L("Search stocks", "ابحث عن سهم")} →</a></div></section>`;
 }
+export function closingBand() {
+  return `<section class="cta-photo"><div class="cta-photo-media"><img src="/assets/cta-1200.jpg" srcset="/assets/cta-700.jpg 700w, /assets/cta-1200.jpg 1200w" sizes="(max-width: 1000px) 100vw, 56vw" width="1200" height="800" loading="lazy" alt="${L("A business professional adjusting a suit jacket", "رجل أعمال يعدّل سترته")}"></div><div class="wrap cta-photo-inner"><div class="cta-photo-copy"><h2>${L("Find your next company.", "اعثر على شركتك القادمة.")}</h2><p>${L("Search by company name or exchange symbol and read its prices, history and reports.", "ابحث باسم الشركة أو رمز السهم واطّلع على أسعارها وسجلها وتقاريرها.")}</p><a class="button primary" href="/search">${L("Search stocks", "ابحث عن سهم")} →</a></div></div></section>`;
+}
 export function ecosystemCta() {
   return `<section class="ecosystem-cta"><div><span class="eyebrow">${L("THE BIN EISA GROUP", "مجموعة بن عيسى")}</span><h2>${L("Part of BinEisa General Trading LLC.", "جزء من BinEisa General Trading LLC.")}</h2><p>${L("Learn about the businesses behind this platform on our main website.", "تعرّف على الأعمال التي تقف خلف هذه المنصة عبر موقعنا الرئيسي.")}</p></div><a class="button on-dark" href="https://bineisa.com/">${L("Visit bineisa.com ↗", "زيارة bineisa.com ↗")}</a></section>`;
 }

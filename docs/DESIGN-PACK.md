@@ -19,24 +19,31 @@ The archives contain no `.fig` source and no logo files; the logo only exists in
 view-only without an account, so the inspect panel (font names, exact spacing) was not available: typefaces were matched
 by eye, and colours were read from the canvas and from the PDF colour operators.
 
-## Logo
+## Logo and layout (Figma Home frame)
 
-The Figma **Logo** frame defines the mark: a hand-drawn, high-contrast serif **B** in navy with **three bronze bars**
-stepping up to it ("navy for trust, bronze for value, cream for calm"). The frame also shows an on-navy version, a
-one-colour version, an app icon, a social avatar / favicon (64 / 32 / 16) and a horizontal lockup: mark, hairline rule,
-serif **BIN EISA** wordmark, and a small tracked label (the sheet says "INVESTMENT · UAE"; this site uses "STOCKS").
+The Figma file is the source of truth and is edited live. With a signed-in view the Properties panel gives exact values;
+the ones used here were read on 15 Oct 2026:
 
-| File | Use |
+| Element | Figma value |
 |---|---|
-| `assets/logo-mark.svg` | Header and footer lockup (navy B, bronze gradient bars) |
-| `assets/logo-wordmark.svg` | The serif BIN EISA wordmark |
-| `assets/logo-avatar.svg`, `assets/favicon.svg` | Navy circle, cream B, bronze bars — sign-in emblem and browser favicon |
-| `assets/apple-touch-icon.png` | 180 × 180 full-bleed navy square for iOS home screens |
+| Logo | "Typographic logo BIN EISA (Inter Bold / Helvetica Bold look, navy)", 139 × 33 px, preceded by a small three-bar gold glyph |
+| Header | 96 px, logo at x=118, menu gap 36 px, actions 38 px high with 14 px gap, transparent over the hero |
+| Hero | 1440 × 720, photo 1020 wide from x=420, fade 420 wide from x=410, copy block at top 170 / left 100 |
+| Hero type | Heading: Cormorant Garamond 600, 80 px, line-height 98 %; eyebrow: Montserrat 600, 11 px, 18 % tracking; body: Montserrat 400, 14 px, 160 % |
+| Buttons | Radius 3 px, 48 px high in the hero, gap 10 px |
+| Sections | Padding 96 px top and bottom, 100 px sides (stat strip 30 / 120); heights: stats 122, approach 622, cycle 413, businesses 556, FAQ 523, closing band 520, footer 193 |
+| Page tokens | `surface/page #F7F7F5`, `surface/alt #F0F0ED`, `surface/card #FFFFFF`, `text/heading #101826` |
 
-**Provenance:** the SVGs are sub-pixel traces of the Figma canvas (mark at 160 % zoom, wordmark at 330 %), not the
-designer's exported vectors, because the file was view-only. Colours and proportions are measured from the sheet; the
-bar gradient is Bronze `#BA9E68` to Deep bronze `#A2834F` over each bar's own height. Replace the four SVGs with
-exports from the Figma Logo frame when available; the file names and viewBox aspect ratios can stay the same.
+Implemented in the override block at the end of `assets/stocks.css` ("Figma layout"). The header lockup is the Home
+frame's glyph plus Inter Bold wordmark, with a small tracked product label ("STOCKS", "GENERAL TRADING") added after a
+hairline. The serif **B** mark from the Logo frame (`assets/logo-avatar.svg`, `assets/favicon.svg`,
+`assets/apple-touch-icon.png`) is kept for the sign-in emblem, favicon and touch icon, as the Logo frame specifies.
+
+The closing band uses the pack's suited-man photograph (`assets/cta-*.jpg`) with a neutral "Find your next company"
+message; none of the offering copy that accompanies it in the pack is used.
+
+The logo SVGs that remain (`logo-mark.svg`, `logo-wordmark.svg`, `logo-avatar.svg`) are traces of the Logo frame, not the
+designer's exports.
 
 ## Tokens
 
@@ -72,7 +79,7 @@ a price such as `608.10` easy to misread.
 
 | Pack element (Home, desktop) | Implementation |
 |---|---|
-| Header: wordmark, centred navigation, navy "Invest now" button, search and account icons | `.market-header` with the logo lockup; the button is a neutral "Main website ↗" link |
+| Header: wordmark, centred navigation, navy "Invest now" button, search and account icons | `.market-header`: transparent over the hero, solid after scrolling; the button is a neutral "Main website ↗" link |
 | Hero: eyebrow, serif title, one line of copy, button, photo fading into the page | `.home-hero` with `hero-*.jpg`; the fade is mirrored in RTL |
 | Three-item strip: minimum investment, period, target return | `.stat-strip`: coverage, data source and freshness, saved lists |
 | "Choose your plan": six priced cards | Not built (see below) |

@@ -84,3 +84,9 @@ The pack's Figma file (public view link) contained the real brand mark, which th
 - Header, footer and sign-in emblem inspected at 1:1 in English and Arabic/RTL; the lockup mirrors and the product label switches to "الأسهم".
 - Mobile sweep at 390 × 844 on `/`, `/stocks`, `/auth/login`, `/auth/register`, `/legal/terms`: document scrollWidth = 390 on every route and the brand never reaches the header controls (brand right edge 155 px, controls start at 276 px or later).
 - The browser tab icon itself could not be inspected through the preview pane; the SVG is a plain circle with a group, and was checked by rendering it as an image on the sign-in page.
+
+### Figma layout pass (15 Oct 2026)
+
+Layout, header, hero, bands and footer were aligned with the Figma Home frame using values read from its Properties panel (see
+[DESIGN-PACK.md](DESIGN-PACK.md)). Measured at 1440 px: header 97 px, logo word at x=120 (33 px tall), hero photo at x=420 ×
+1020, approach image 641 × 427. Mobile (390) and Arabic checked: no horizontal overflow, all seven images load.
